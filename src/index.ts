@@ -1,4 +1,5 @@
 import { PrismaClient, User } from '@prisma/client'
+import {Settings} from "./settings";
 
 
 const prisma = new PrismaClient();
@@ -37,6 +38,8 @@ export class App {
         await prisma.$queryRaw`SELECT * FROM "posts"`
     }
 }
-
+const bootstrap = async () => {
+    await connectToDB(Number(Settings.port))
+}
 const app = new App();
 app.init()
