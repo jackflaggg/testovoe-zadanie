@@ -10,9 +10,9 @@ export class PromotionQueryRepository implements PromotionQueryRepoInterface {
     constructor(@inject(TYPES.PrismaService) private prismaService: PrismaService,
                 @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface) {}
 
-    async find(query: any) {
+    async find(id: number) {
         try {
-            return await this.prismaService.client.promotionModel.findFirst({where: {id: query.id}});
+            return await this.prismaService.client.promotionModel.findFirst({where: {id}});
         } catch (err: unknown){
             this.logger.error('Возникла ошибка во время создания акции:', err);
             return null;
