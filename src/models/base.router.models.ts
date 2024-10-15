@@ -12,7 +12,7 @@ export abstract class BaseRouter {
     protected abstract initializeRoutes(): void;
 
     protected addRoute(args: RouterInterface): void {
-        const {method, path, handler} = args;
-        this.router[method](path, handler);
+        // const {method, path, handler} = args;
+        // this.router[method](path, handler);
     }
 }

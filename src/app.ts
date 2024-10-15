@@ -6,6 +6,7 @@ import {inject, injectable} from "inversify";
 import 'reflect-metadata'
 import {TYPES} from "./utils/types/types";
 import {LoggerServiceInterface} from "./models/logger.service.model";
+import {PrismaService} from "./db/db";
 
 // const prisma = new PrismaClient();
 @injectable()
@@ -16,6 +17,7 @@ export class App {
 
     constructor(
         @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface,
+        @inject(TYPES.PrismaService) private prismaService: PrismaService
     ) {
         this.app = express();
         this.port = Number(Settings.port);
@@ -32,7 +34,7 @@ export class App {
     public async init () {
         this.useMiddleware();
         this.useRoutes();
-        // const db = await prisma.$connect();
+        const db = await this.prismaService.connect();
         this.server = this.app.listen(this.port, () => {
             console.log('Сервер запущен на ' + this.port + ' порту!')
         })
