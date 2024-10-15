@@ -1,4 +1,4 @@
 export interface PromotionQueryRepoInterface {
-    getAll(): any
+    getAll(queryParamsTo: any): any
     find(query: any): any
 }
