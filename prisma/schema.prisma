@@ -13,39 +13,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String
+model UserModel {
+  id        Int              @id @default(autoincrement())
+  email     String           @unique
   password  String
-  createdAt DateTime @default(now())
-  updateAt  DateTime @default(now())
-  post      Post[]
+  role      String // "ADMIN" или "SUPPLIER"
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  offers    PromotionModel[] @relation("SupplierOffers")
 }
 
-model Post {
-  id        Int         @id @default(autoincrement())
-  title     String
-  content   String
-  author    User        @relation(fields: [authorId], references: [id])
-  authorId  Int
-  createdAt DateTime    @default(now())
-  updateAt  DateTime    @default(now())
-  tags      PostOnTag[]
-}
+model PromotionModel {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  published   Boolean  @default(false) // по умолчанию не опубликовано
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  supplierId  Int
+  status      String // "PENDING", "APPROVED", "REJECTED"
 
-model Tag {
-  id    Int         @id @default(autoincrement())
-  name  String
-  posts PostOnTag[]
-}
-
-model PostOnTag {
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    Int
-  tag       Tag      @relation(fields: [tagId], references: [id])
-  tagId     Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-
-  @@id([postId, tagId])
+  supplier UserModel @relation("SupplierOffers", fields: [supplierId], references: [id]) // Указали имя реляции и обратное поле
 }

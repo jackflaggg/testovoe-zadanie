@@ -1,13 +1,39 @@
 import {PromotionRepoInterface} from "../../models/promotion.repository.interface";
+import {inject} from "inversify";
+import {TYPES} from "../../utils/types/types";
+import {PrismaService } from "../../db/db";
+import {LoggerServiceInterface} from "../../models/logger.service.model";
 
+//TODO: Вернуться и дотипизировать ответы
 export class PromotionRepository implements PromotionRepoInterface  {
-    create(body: any): any {
+    constructor(@inject(TYPES.PrismaService) private prisma: PrismaService,
+                @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface) {}
+    async create(body: any) {
+        try {
+            return await this.prisma.client.promotionModel.create({
+                data: body
+            });
+        } catch (err: unknown){
+            this.logger.error('Возникла ошибка во время создания акции:', err);
+            return null;
+        }
     }
 
-    delete(id: number): void {
+    async delete(id: number) {
+        try {
+            return await this.prisma.client.promotionModel.delete({where: {id: id}});
+        } catch (err: unknown){
+            this.logger.error('Возникла ошибка во время удаления акции:', err);
+            return null;
+        }
     }
 
-    update(body: any): any {
+    async update(body: any, idPromotion: number) {
+        try {
+            return await this.prisma.client.promotionModel.update({where: { id: idPromotion }, data: body});
+        } catch (err: unknown){
+            this.logger.error('Возникла ошибка во время удаления акции:', err);
+            return null;
+        }
     }
-
 }
