@@ -15,7 +15,7 @@ export class App {
     public port: number;
 
     constructor(
-        @inject(TYPES.LoggerServiceInterface) private loggerService: LoggerServiceInterface,
+        @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface,
     ) {
         this.app = express();
         this.port = Number(Settings.port);
@@ -27,7 +27,7 @@ export class App {
     }
 
     useRoutes(){
-        this.app.use('/', this.useRoutes)
+        this.app.use('/promotion', this.useRoutes)
     }
     public async init () {
         this.useMiddleware();
@@ -36,5 +36,6 @@ export class App {
         this.server = this.app.listen(this.port, () => {
             console.log('Сервер запущен на ' + this.port + ' порту!')
         })
+        this.logger.log();
     }
 }
