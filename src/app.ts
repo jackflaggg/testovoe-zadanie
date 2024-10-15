@@ -1,10 +1,9 @@
-import { PrismaClient, User } from '@prisma/client'
 import {Settings} from "./settings";
 import express, {Express} from 'express'
 import {Server} from "http";
 import cors from 'cors'
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
 export class App {
     private app: Express;
@@ -27,7 +26,7 @@ export class App {
     public async init () {
         this.useMiddleware();
         this.useRoutes();
-        const db = await prisma.$connect();
+        // const db = await prisma.$connect();
         this.server = this.app.listen(this.port, () => {
             console.log('Сервер запущен на ' + this.port + ' порту!')
         })
