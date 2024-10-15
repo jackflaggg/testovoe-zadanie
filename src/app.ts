@@ -2,15 +2,21 @@ import {Settings} from "./settings";
 import express, {Express} from 'express'
 import {Server} from "http";
 import cors from 'cors'
+import {inject, injectable} from "inversify";
+import 'reflect-metadata'
+import {TYPES} from "./utils/types/types";
+import {LoggerServiceInterface} from "./models/logger.service.model";
 
 // const prisma = new PrismaClient();
-
+@injectable()
 export class App {
     private app: Express;
     private server: Server | undefined;
     public port: number;
 
-    constructor() {
+    constructor(
+        @inject(TYPES.LoggerServiceInterface) private loggerService: LoggerServiceInterface,
+    ) {
         this.app = express();
         this.port = Number(Settings.port);
     }
