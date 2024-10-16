@@ -7,6 +7,8 @@ import 'reflect-metadata'
 import {TYPES} from "./utils/types/types";
 import {LoggerServiceInterface} from "./models/logger.service.model";
 import {PrismaService} from "./db/db";
+import {PromotionRepoInterface} from "./models/promotion.repository.interface";
+import {PromotionQueryRepoInterface} from "./models/promotion.query.repository.interface";
 
 // const prisma = new PrismaClient();
 @injectable()
@@ -17,7 +19,9 @@ export class App {
 
     constructor(
         @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface,
-        @inject(TYPES.PrismaService) private prismaService: PrismaService
+        @inject(TYPES.PrismaService) private prismaService: PrismaService,
+        @inject(TYPES.PromotionRepoInterface) private promotionRepo: PromotionRepoInterface,
+        @inject(TYPES.PromotionQueryRepoInterface) private promotionQueryRepo: PromotionQueryRepoInterface,
     ) {
         this.app = express();
         this.port = Number(Settings.port);

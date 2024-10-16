@@ -1,10 +1,11 @@
 import {PromotionRepoInterface} from "../../models/promotion.repository.interface";
-import {inject} from "inversify";
+import {inject, injectable} from "inversify";
 import {TYPES} from "../../utils/types/types";
 import {PrismaService } from "../../db/db";
 import {LoggerServiceInterface} from "../../models/logger.service.model";
 
 //TODO: Вернуться и дотипизировать ответы
+@injectable()
 export class PromotionRepository implements PromotionRepoInterface  {
     constructor(@inject(TYPES.PrismaService) private prisma: PrismaService,
                 @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface) {}
