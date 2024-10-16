@@ -1,5 +1,3 @@
-import {PromotionQueryRepoInterface} from "../../models/promotion.query.repository.interface";
-import {PromotionRepoInterface} from "../../models/promotion.repository.interface";
 
 export const TYPES = {
     Application: Symbol.for("Application"),
