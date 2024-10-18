@@ -1,5 +1,5 @@
 export interface PromotionControllerModels {
-    login: () => void;
-    promotions: () => void;
-    suppliers: () => void;
+    login: () => Promise<void>;
+    promotions: () => Promise<void>;
+    suppliers: () => Promise<void>;
 }

@@ -1,9 +1,9 @@
-import {NextFunction, Request, Response} from "express";
+import {NextFunction, Request, Response, Router} from "express";
+import {MiddlewareInterface} from "./middleware.interface";
 
-type HttpMethod = 'get' | 'post' | 'put' | 'delete';
-
-export interface RouterInterface {
-    method: HttpMethod,
-    path: string,
-    handler: (req: Request, res: Response, next: NextFunction) => void
+export interface IControllerRoute {
+    path: string;
+    func: (req: Request, Response: Response, next: NextFunction) => void;
+    method: keyof Pick<Router, 'get' | 'post' | 'put' | 'delete' | 'patch'>;
+    middlewares?: MiddlewareInterface[]
 }
