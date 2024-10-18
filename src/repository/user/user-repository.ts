@@ -1,13 +1,13 @@
 import {PromotionRepoInterface} from "../../models/promotion.repository.interface";
 
 export class UserRepository implements PromotionRepoInterface {
-    create(body: any) : any {
+    async create(body: any)  {
 
     }
-    update(body: any, idPromotion: number) : any{
+    async update(body: any, idPromotion: number) {
 
     }
-    delete(id: number) : any{
+    async delete(id: number) {
 
     }
 }
