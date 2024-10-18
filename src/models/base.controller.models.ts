@@ -34,11 +34,14 @@ export abstract class BaseController {
             .status(code)
             .send(msg);
     }
-
+// Этот метод связывает маршруты с их обработчиками и middleware
     protected bindRoutes(routes: IControllerRoute[]){
         for (const route of routes){
             this.logger.log(`[${route.method}] ${route.path}`);
+            //есть ли middleware для текущего маршрута. Если есть, он создает новый массив,
+            //где каждая middleware-функция связана с контекстом экземпляра класса
             const middleware = route.middlewares?.map(elem => elem.execute.bind(elem));
+            // обработчик маршрута также связывается с контекстом текущего класса
             const handler = route.func.bind(this);
             const pipeline = middleware ? [...middleware, handler] : handler;
             this.router[route.method](route.path, pipeline);
