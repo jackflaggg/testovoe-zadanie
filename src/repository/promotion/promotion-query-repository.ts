@@ -1,6 +1,7 @@
 import {PromotionQueryRepoInterface} from "../../models/promotion.query.repository.interface";
 import {TYPES} from "../../utils/types/types";
 import {inject, injectable} from "inversify";
+import 'reflect-metadata'
 import {PrismaService} from "../../db/db";
 import {LoggerServiceInterface} from "../../models/logger.service.model";
 import {queryHelperToPromotion} from "../../utils/mapper/InQueryPromotion.mapper";

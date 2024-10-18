@@ -1,5 +1,6 @@
 import {PromotionRepoInterface} from "../../models/promotion.repository.interface";
 import {inject, injectable} from "inversify";
+import 'reflect-metadata'
 import {TYPES} from "../../utils/types/types";
 import {PrismaService } from "../../db/db";
 import {LoggerServiceInterface} from "../../models/logger.service.model";

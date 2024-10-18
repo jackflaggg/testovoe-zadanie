@@ -5,24 +5,27 @@ import {TYPES} from "../utils/types/types";
 import {LoggerServiceInterface} from "../models/logger.service.model";
 import {NextFunction, Request, Response} from "express";
 import {PromotionControllerModels} from "../models/promotion.controller.models";
+import {ValidateMiddleware} from "../utils/middlewares/validate.middleware";
+import {SupplierLoginDto} from "../validators/suppliers.login.dto";
+import {SuppliersRegisterDto} from "../validators/suppliers.register.dto";
 
 @injectable()
 export class PromotionController extends BaseController implements PromotionControllerModels{
     constructor(
-        @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface,
+        @inject(TYPES.LoggerServiceInterface) private loggerService: LoggerServiceInterface,
     ) {
-        super(logger);
+        super(loggerService);
         this.bindRoutes([
             {
                 path: '/register',
                 method: 'post',
                 func: (req: Request, Response: Response, next: NextFunction) => ({}),
-                middlewares: [] },
+                middlewares: [new ValidateMiddleware(SuppliersRegisterDto)] },
             {
                 path: '/login',
                 method: 'post',
                 func: (req: Request, Response: Response, next: NextFunction)=> ({}),
-                middlewares: [] },
+                middlewares: [new ValidateMiddleware(SupplierLoginDto)] },
             {
                 path: '/info',
                 method: 'get',
@@ -30,7 +33,13 @@ export class PromotionController extends BaseController implements PromotionCont
                 middlewares: [] },
         ])
     }
-    async login () : Promise<void>{};
+    async login (req: Request, res: Response, next: NextFunction) : Promise<void>{
+        try {
+
+        } catch (err: unknown){
+
+        }
+    };
     async promotions (): Promise<void>{};
     async suppliers () : Promise<void> {};
 }

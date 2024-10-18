@@ -1,9 +1,11 @@
+import {PromotionQueryRepository} from "../../repository/promotion/promotion-query-repository";
+import {PromotionRepository} from "../../repository/promotion/promotion-repository";
 
 export const TYPES = {
     Application: Symbol.for("Application"),
     LoggerServiceInterface: Symbol.for("LoggerServiceInterface"),
     PromotionController: Symbol.for("PromotionController"),
     PrismaService: Symbol.for("PrismaService"),
-    PromotionQueryRepoInterface: Symbol.for("PromotionQueryRepoInterface"),
-    PromotionRepoInterface: Symbol.for("PromotionRepoInterface"),
+    PromotionQueryRepository: Symbol.for("PromotionQueryRepository"),
+    PromotionRepository: Symbol.for("PromotionRepository"),
 }

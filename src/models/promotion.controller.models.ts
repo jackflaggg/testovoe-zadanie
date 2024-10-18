@@ -1,5 +1,7 @@
+import {NextFunction, Request, Response} from "express";
+
 export interface PromotionControllerModels {
-    login: () => Promise<void>;
-    promotions: () => Promise<void>;
-    suppliers: () => Promise<void>;
+    login: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+    promotions: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+    suppliers: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 }

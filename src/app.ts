@@ -22,8 +22,8 @@ export class App {
         @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface,
         @inject(TYPES.PrismaService) private prismaService: PrismaService,
         @inject(TYPES.PromotionController) private promotionController: PromotionController,
-        @inject(TYPES.PromotionRepoInterface) private promotionRepo: PromotionRepoInterface,
-        @inject(TYPES.PromotionQueryRepoInterface) private promotionQueryRepo: PromotionQueryRepoInterface,
+        @inject(TYPES.PromotionRepository) private promotionRepo: PromotionRepoInterface,
+        @inject(TYPES.PromotionQueryRepository) private promotionQueryRepo: PromotionQueryRepoInterface,
     ) {
         this.app = express();
         this.port = Number(Settings.port);
