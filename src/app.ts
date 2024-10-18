@@ -9,6 +9,7 @@ import {LoggerServiceInterface} from "./models/logger.service.model";
 import {PrismaService} from "./db/db";
 import {PromotionRepoInterface} from "./models/promotion.repository.interface";
 import {PromotionQueryRepoInterface} from "./models/promotion.query.repository.interface";
+import {PromotionController} from "./controllers/promotion.controller";
 
 // const prisma = new PrismaClient();
 @injectable()
@@ -20,6 +21,7 @@ export class App {
     constructor(
         @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface,
         @inject(TYPES.PrismaService) private prismaService: PrismaService,
+        @inject(TYPES.PromotionController) private promotionController: PromotionController,
         @inject(TYPES.PromotionRepoInterface) private promotionRepo: PromotionRepoInterface,
         @inject(TYPES.PromotionQueryRepoInterface) private promotionQueryRepo: PromotionQueryRepoInterface,
     ) {
@@ -33,7 +35,7 @@ export class App {
     }
 
     useRoutes(){
-        this.app.use('/promotion', this.useRoutes)
+        this.app.use('/promotion', this.promotionController.router)
     }
     public async init () {
         this.useMiddleware();
