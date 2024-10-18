@@ -20,7 +20,8 @@ export class UserRepository implements PromotionRepoInterface {
     }
     async update(body: any, idPromotion: number) {
         try {
-            return await this.prismaService.client.userModel.create({
+            return await this.prismaService.client.userModel.update({
+                where: {id: idPromotion},
                 data: body
             });
         } catch (err: unknown){
@@ -30,8 +31,10 @@ export class UserRepository implements PromotionRepoInterface {
     }
     async delete(id: number) {
         try {
-            return await this.prismaService.client.userModel.create({
-                data: id
+            return await this.prismaService.client.userModel.delete({
+                where: {
+                    id
+                }
             });
         } catch (err: unknown){
             this.logger.error('Возникла ошибка во время создания акции:', err);
