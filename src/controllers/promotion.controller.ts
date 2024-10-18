@@ -6,11 +6,11 @@ import {LoggerServiceInterface} from "../models/logger.service.model";
 import {NextFunction, Request, Response} from "express";
 import {PromotionControllerModels} from "../models/promotion.controller.models";
 import {ValidateMiddleware} from "../utils/middlewares/validate.middleware";
-import {SupplierLoginDto} from "../validators/suppliers.login.dto";
 import {SuppliersRegisterDto} from "../validators/suppliers.register.dto";
-import {PromotionQueryRepository} from "../repository/promotion/promotion-query-repository";
 import {queryHelperToPromotions} from "../utils/mapper/helper.query.get";
 import {PromotionQueryRepoInterface} from "../models/promotion.query.repository.interface";
+import {AdminMiddleware} from "../utils/middlewares/admin.middleware";
+import {HTTP_STATUSES} from "../models/http-statuses.models";
 
 @injectable()
 export class PromotionController extends BaseController implements PromotionControllerModels{
@@ -28,8 +28,8 @@ export class PromotionController extends BaseController implements PromotionCont
             {
                 path: '/admin/login',
                 method: 'post',
-                func: (req: Request, Response: Response, next: NextFunction)=> ({}),
-                middlewares: [new ValidateMiddleware(SupplierLoginDto)] },
+                func: this.login,
+                middlewares: [new ValidateMiddleware(AdminMiddleware)] },
             {
                 path: '/admin/promotions',
                 method: 'get',
@@ -39,9 +39,12 @@ export class PromotionController extends BaseController implements PromotionCont
     }
     async login (req: Request, res: Response, next: NextFunction) : Promise<void>{
         try {
-
+            res.status(HTTP_STATUSES.CREATED_201).send({msg: 'Успешная авторизация'})
         } catch (err: unknown){
-
+            if (err instanceof Error){
+                console.log(err)
+            }
+            console.error(err)
         }
     };
     async promotions (req: Request, res: Response, next: NextFunction): Promise<void>{

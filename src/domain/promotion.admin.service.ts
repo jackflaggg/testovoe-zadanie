@@ -1,5 +1,7 @@
 export class PromotionAdminService {
-    async loginAdmin(): Promise<void> {}
+    async loginAdmin(): Promise<void> {
+
+    }
     async createPromotion(): Promise<void> {}
     // получение всех акций из репозитория
     async deletePromotion(id: string): Promise<void> {}
