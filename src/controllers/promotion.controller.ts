@@ -8,11 +8,13 @@ import {PromotionControllerModels} from "../models/promotion.controller.models";
 import {ValidateMiddleware} from "../utils/middlewares/validate.middleware";
 import {SupplierLoginDto} from "../validators/suppliers.login.dto";
 import {SuppliersRegisterDto} from "../validators/suppliers.register.dto";
+import {PromotionQueryRepository} from "../repository/promotion/promotion-query-repository";
 
 @injectable()
 export class PromotionController extends BaseController implements PromotionControllerModels{
     constructor(
         @inject(TYPES.LoggerServiceInterface) private loggerService: LoggerServiceInterface,
+        @inject(TYPES.PromotionQueryRepository) private promotionQueryRepository: PromotionQueryRepository,
     ) {
         super(loggerService);
         this.bindRoutes([
@@ -22,12 +24,12 @@ export class PromotionController extends BaseController implements PromotionCont
                 func: (req: Request, Response: Response, next: NextFunction) => ({}),
                 middlewares: [new ValidateMiddleware(SuppliersRegisterDto)] },
             {
-                path: '/login',
+                path: '/admin/login',
                 method: 'post',
                 func: (req: Request, Response: Response, next: NextFunction)=> ({}),
                 middlewares: [new ValidateMiddleware(SupplierLoginDto)] },
             {
-                path: '/info',
+                path: '/admin/promotions',
                 method: 'get',
                 func: (req: Request, Response: Response, next: NextFunction)=> ({}),
                 middlewares: [] },
@@ -40,6 +42,9 @@ export class PromotionController extends BaseController implements PromotionCont
 
         }
     };
-    async promotions (): Promise<void>{};
+    async promotions (req: Request, res: Response, next: NextFunction): Promise<void>{
+        const {} = req.query;
+        const allPromotions = await this.promotionQueryRepository.getAll()
+    };
     async suppliers () : Promise<void> {};
 }
