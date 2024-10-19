@@ -41,8 +41,8 @@ export class PromotionController extends BaseController implements PromotionCont
     }
     async login (req: Request, res: Response, next: NextFunction) : Promise<void>{
         try {
-            const admin = this.promotionAdminService.loginAdmin(req.body);
-            console.log(admin);
+            const admin = await this.promotionAdminService.loginAdmin(req.body);
+            console.log(admin)
             res.status(HTTP_STATUSES.CREATED_201).send({msg: 'Успешная авторизация'})
         } catch (err: unknown){
             if (err instanceof Error){

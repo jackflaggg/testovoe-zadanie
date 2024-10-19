@@ -1,5 +1,3 @@
-import {PromotionAdminService} from "../../domain/promotion.admin.service";
-
 export const TYPES = {
     Application: Symbol.for("Application"),
     LoggerServiceInterface: Symbol.for("LoggerServiceInterface"),

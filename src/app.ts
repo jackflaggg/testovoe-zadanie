@@ -10,7 +10,7 @@ import {PrismaService} from "./db/db";
 import {PromotionRepoInterface} from "./models/promotion.repository.interface";
 import {PromotionQueryRepoInterface} from "./models/promotion.query.repository.interface";
 import {PromotionController} from "./controllers/promotion.controller";
-import {UserQueryRepository} from "./repository/user/user-query-repository";
+import {PromotionAdminServiceInterface} from "./models/admin.promotion.service.model";
 
 @injectable()
 export class App {
@@ -22,8 +22,9 @@ export class App {
         @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface,
         @inject(TYPES.PrismaService) private prismaService: PrismaService,
         @inject(TYPES.PromotionController) private promotionController: PromotionController,
+        @inject(TYPES.PromotionAdminService) private promotionAdminService: PromotionAdminServiceInterface,
         @inject(TYPES.UserRepository) private userRepository: PromotionRepoInterface,
-        @inject(TYPES.UserQueryRepository) private userQueryRepository: UserQueryRepository,
+        @inject(TYPES.UserQueryRepository) private userQueryRepository: PromotionQueryRepoInterface,
         @inject(TYPES.PromotionRepository) private promotionRepo: PromotionRepoInterface,
         @inject(TYPES.PromotionQueryRepository) private promotionQueryRepo: PromotionQueryRepoInterface,
     ) {

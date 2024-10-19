@@ -1,9 +1,12 @@
 import {InAdminModel} from "../models/admin-model";
 import {UserQueryRepository} from "../repository/user/user-query-repository";
 import {PromotionAdminServiceInterface} from "../models/admin.promotion.service.model";
+import {inject, injectable} from "inversify";
+import {TYPES} from "../utils/types/types";
 
+@injectable()
 export class PromotionAdminService implements PromotionAdminServiceInterface{
-    constructor(private userQueryRepository: UserQueryRepository) {}
+    constructor(@inject(TYPES.UserQueryRepository) private userQueryRepository: UserQueryRepository) {}
 
     async loginAdmin(body: InAdminModel) {
         const findAdmin = await this.userQueryRepository.find(body);
