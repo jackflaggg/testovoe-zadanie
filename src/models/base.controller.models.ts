@@ -29,6 +29,9 @@ export abstract class BaseController {
     public delete(res: Response){
         return res.status(HTTP_STATUSES.NO_CONTENT_204);
     }
+    public noAuth<T>(res: Response, msg: T){
+        return this.send<T>(res, HTTP_STATUSES.NOT_AUTHORIZATION_401, msg)
+    }
     public send<T>(res: Response, code: number, msg: T){
         return res
             .status(code)
