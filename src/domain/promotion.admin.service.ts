@@ -1,6 +1,13 @@
-export class PromotionAdminService {
-    async loginAdmin(): Promise<void> {
+import {InAdminModel} from "../models/admin-model";
+import {UserQueryRepository} from "../repository/user/user-query-repository";
+import {PromotionAdminServiceInterface} from "../models/admin.promotion.service.model";
 
+export class PromotionAdminService implements PromotionAdminServiceInterface{
+    constructor(private userQueryRepository: UserQueryRepository) {}
+
+    async loginAdmin(body: InAdminModel) {
+        const findAdmin = await this.userQueryRepository.find(body);
+        return findAdmin;
     }
     async createPromotion(): Promise<void> {}
     // получение всех акций из репозитория

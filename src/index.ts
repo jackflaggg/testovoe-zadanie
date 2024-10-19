@@ -12,11 +12,14 @@ import {PromotionRepoInterface} from "./models/promotion.repository.interface";
 import {PromotionRepository} from "./repository/promotion/promotion-repository";
 import {UserRepository} from "./repository/user/user-repository";
 import {UserQueryRepository} from "./repository/user/user-query-repository";
+import {PromotionAdminService} from "./domain/promotion.admin.service";
+import {PromotionAdminServiceInterface} from "./models/admin.promotion.service.model";
 
 export const appContainers = new ContainerModule((bind: interfaces.Bind): void => {
     bind<LoggerServiceInterface>(TYPES.LoggerServiceInterface).to(LoggerService).inSingletonScope();
     bind<PrismaService>(TYPES.PrismaService).to(PrismaService).inSingletonScope();
     bind<PromotionControllerModels>(TYPES.PromotionController).to(PromotionController).inSingletonScope();
+    bind<PromotionAdminServiceInterface>(TYPES.PromotionAdminService).to(PromotionAdminService).inSingletonScope();
     bind<PromotionRepoInterface>(TYPES.PromotionRepository).to(PromotionRepository).inSingletonScope();
     bind<PromotionRepoInterface>(TYPES.UserRepository).to(UserRepository).inSingletonScope();
     bind<PromotionQueryRepoInterface>(TYPES.UserQueryRepository).to(UserQueryRepository).inSingletonScope();

@@ -11,11 +11,13 @@ import {queryHelperToPromotions} from "../utils/mapper/helper.query.get";
 import {PromotionQueryRepoInterface} from "../models/promotion.query.repository.interface";
 import {AdminLoginDto} from "../utils/middlewares/admin.middleware";
 import {HTTP_STATUSES} from "../models/http-statuses.models";
+import {PromotionAdminService} from "../domain/promotion.admin.service";
 
 @injectable()
 export class PromotionController extends BaseController implements PromotionControllerModels{
     constructor(
         @inject(TYPES.LoggerServiceInterface) private loggerService: LoggerServiceInterface,
+        @inject(TYPES.PromotionAdminService) private promotionAdminService: PromotionAdminService,
         @inject(TYPES.PromotionQueryRepository) private promotionQueryRepository: PromotionQueryRepoInterface,
     ) {
         super(loggerService);
@@ -39,6 +41,8 @@ export class PromotionController extends BaseController implements PromotionCont
     }
     async login (req: Request, res: Response, next: NextFunction) : Promise<void>{
         try {
+            const admin = this.promotionAdminService.loginAdmin(req.body);
+            console.log(admin);
             res.status(HTTP_STATUSES.CREATED_201).send({msg: 'Успешная авторизация'})
         } catch (err: unknown){
             if (err instanceof Error){
