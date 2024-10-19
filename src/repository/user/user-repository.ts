@@ -3,12 +3,13 @@ import {inject, injectable} from "inversify";
 import {TYPES} from "../../utils/types/types";
 import {PrismaService} from "../../db/db";
 import {LoggerServiceInterface} from "../../models/logger.service.model";
+import {UserModel} from "@prisma/client";
 
 @injectable()
 export class UserRepository implements PromotionRepoInterface {
     constructor(@inject(TYPES.PrismaService) private prismaService: PrismaService,
                 @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface) {}
-    async create(body: any)  {
+    async create(body: UserModel)  {
         try {
             return await this.prismaService.client.userModel.create({
                 data: body

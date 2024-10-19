@@ -4,13 +4,14 @@ import 'reflect-metadata'
 import {TYPES} from "../../utils/types/types";
 import {PrismaService } from "../../db/db";
 import {LoggerServiceInterface} from "../../models/logger.service.model";
+import {PromotionModel} from "@prisma/client";
 
 //TODO: Вернуться и дотипизировать ответы
 @injectable()
 export class PromotionRepository implements PromotionRepoInterface  {
     constructor(@inject(TYPES.PrismaService) private prisma: PrismaService,
                 @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface) {}
-    async create(body: any) {
+    async create(body: PromotionModel) {
         try {
             return await this.prisma.client.promotionModel.create({
                 data: body
