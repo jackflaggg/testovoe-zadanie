@@ -3,4 +3,6 @@ config()
 export const Settings = {
     port: process.env.PORT || 5901,
     admin: process.env.ADMIN || 'rasul@rasul.com:230900',
+    tokenDuration: process.env.TOKEN_DURATION!,
+    secretKey: process.env.SECRET_KEY!,
 }
