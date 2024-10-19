@@ -9,7 +9,7 @@ import {ValidateMiddleware} from "../utils/middlewares/validate.middleware";
 import {SuppliersRegisterDto} from "../validators/suppliers.register.dto";
 import {queryHelperToPromotions} from "../utils/mapper/helper.query.get";
 import {PromotionQueryRepoInterface} from "../models/promotion.query.repository.interface";
-import {AdminMiddleware} from "../utils/middlewares/admin.middleware";
+import {AdminLoginDto} from "../utils/middlewares/admin.middleware";
 import {HTTP_STATUSES} from "../models/http-statuses.models";
 
 @injectable()
@@ -29,7 +29,7 @@ export class PromotionController extends BaseController implements PromotionCont
                 path: '/admin/login',
                 method: 'post',
                 func: this.login,
-                middlewares: [new ValidateMiddleware(AdminMiddleware)] },
+                middlewares: [new ValidateMiddleware(AdminLoginDto)] },
             {
                 path: '/admin/promotions',
                 method: 'get',
