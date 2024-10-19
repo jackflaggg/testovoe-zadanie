@@ -10,10 +10,8 @@ import {PrismaService} from "./db/db";
 import {PromotionRepoInterface} from "./models/promotion.repository.interface";
 import {PromotionQueryRepoInterface} from "./models/promotion.query.repository.interface";
 import {PromotionController} from "./controllers/promotion.controller";
-import {UserRepository} from "./repository/user/user-repository";
 import {UserQueryRepository} from "./repository/user/user-query-repository";
 
-// const prisma = new PrismaClient();
 @injectable()
 export class App {
     private app: Express;
