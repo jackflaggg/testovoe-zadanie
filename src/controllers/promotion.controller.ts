@@ -50,9 +50,9 @@ export class PromotionController extends BaseController implements PromotionCont
             res.status(HTTP_STATUSES.CREATED_201).send({msg: 'Успешная авторизация'})
         } catch (err: unknown){
             if (err instanceof Error){
-                console.log(err)
+                this.loggerService.log(err)
             }
-            console.error(err)
+            this.loggerService.error(err)
         }
     };
     async promotions (req: Request, res: Response, next: NextFunction): Promise<void>{
