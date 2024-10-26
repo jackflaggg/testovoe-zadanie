@@ -12,12 +12,13 @@ import {PromotionQueryRepoInterface} from "../models/promotion.query.repository.
 import {AdminLoginDto} from "../utils/middlewares/admin.middleware";
 import {HTTP_STATUSES} from "../models/http-statuses.models";
 import {PromotionAdminService} from "../domain/promotion.admin.service";
+import {PromotionAdminServiceInterface} from "../models/admin.promotion.service.model";
 
 @injectable()
 export class PromotionController extends BaseController implements PromotionControllerModels{
     constructor(
         @inject(TYPES.LoggerServiceInterface) private loggerService: LoggerServiceInterface,
-        @inject(TYPES.PromotionAdminService) private promotionAdminService: PromotionAdminService,
+        @inject(TYPES.PromotionAdminService) private promotionAdminService: PromotionAdminServiceInterface,
         @inject(TYPES.PromotionQueryRepository) private promotionQueryRepository: PromotionQueryRepoInterface,
     ) {
         super(loggerService);
