@@ -1,5 +1,5 @@
 export interface PromotionAdminServiceInterface {
-     loginAdmin:(body: string) => any ;
+     loginAdmin:(email: string, password: string) => any ;
  createPromotion: () => any ;
 // получение всех акций из репозитория
  deletePromotion: (id: string)=> any ;

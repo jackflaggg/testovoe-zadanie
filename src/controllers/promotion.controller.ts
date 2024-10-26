@@ -48,7 +48,7 @@ export class PromotionController extends BaseController implements PromotionCont
                 res.sendStatus(HTTP_STATUSES.NOT_AUTHORIZATION_401);
                 return
             }
-            const auth = await this.promotionAdminService.loginAdmin(credEmail.email)
+            const auth = await this.promotionAdminService.loginAdmin(credEmail.email, credEmail.password)
 
             res.status(HTTP_STATUSES.CREATED_201).send({msg: 'Успешная авторизация'})
         } catch (err: unknown){
