@@ -4,16 +4,13 @@ import {PrismaService} from "../../db/db";
 import {LoggerServiceInterface} from "../../models/logger.service.model";
 import {PromotionQueryRepoInterface} from "../../models/promotion.query.repository.interface";
 import {queryHelperToPromotion} from "../../utils/mapper/InQueryPromotion.mapper";
-import {InAdminModel} from "../../models/admin-model";
 
 @injectable()
 export class UserQueryRepository implements PromotionQueryRepoInterface {
     constructor(@inject(TYPES.PrismaService) private prismaService: PrismaService,
                 @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface) {}
-    async find(body: InAdminModel) {
-        const {email, password} = body;
+    async find( email: string) {
         try {
-            console.log(email, password)
             return await this.prismaService.client.userModel.findFirst({where: {email}});
         } catch (err: unknown){
             this.logger.error('Возникла ошибка во время поиска юзера:', err);

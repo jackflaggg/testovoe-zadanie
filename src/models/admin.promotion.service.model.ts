@@ -1,7 +1,5 @@
-import {InAdminModel} from "./admin-model";
-
 export interface PromotionAdminServiceInterface {
-     loginAdmin:(body: InAdminModel) => any ;
+     loginAdmin:(body: string) => any ;
  createPromotion: () => any ;
 // получение всех акций из репозитория
  deletePromotion: (id: string)=> any ;

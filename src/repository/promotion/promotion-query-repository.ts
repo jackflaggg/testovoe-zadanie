@@ -43,7 +43,7 @@ export class PromotionQueryRepository implements PromotionQueryRepoInterface {
             const nextCursor = hasMore ? items[items.length - 1].id : null; // Устанавливаем следующий курсор
             return {
                 nextCursor,
-                items: items.map(blog => (blog)), // Маппинг данных
+                items: items.map(({id, updatedAt, ...blog}) => blog), // Маппинг данных
             };
         } catch (err: unknown){
             this.logger.error('Возникла ошибка во время создания акции:', err);

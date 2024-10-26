@@ -8,5 +8,6 @@ export const TYPES = {
     UserQueryRepository: Symbol.for("UserQueryRepository"),
     PromotionQueryRepository: Symbol.for("PromotionQueryRepository"),
     PromotionRepository: Symbol.for("PromotionRepository"),
-    HashServiceInterface: Symbol.for("HashServiceInterface")
+    HashServiceInterface: Symbol.for("HashServiceInterface"),
+    BasicAuthMiddleware: Symbol.for("BasicAuthMiddleware"),
 }

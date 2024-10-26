@@ -9,17 +9,17 @@ import {ValidateMiddleware} from "../utils/middlewares/validate.middleware";
 import {SuppliersRegisterDto} from "../validators/suppliers.register.dto";
 import {queryHelperToPromotions} from "../utils/mapper/helper.query.get";
 import {PromotionQueryRepoInterface} from "../models/promotion.query.repository.interface";
-import {AdminLoginDto} from "../utils/middlewares/admin.middleware";
 import {HTTP_STATUSES} from "../models/http-statuses.models";
+import {BasicAuthMiddleware, ValMiddleToBasic} from "../utils/middlewares/basic.auth.middleware";
 import {PromotionAdminService} from "../domain/promotion.admin.service";
-import {PromotionAdminServiceInterface} from "../models/admin.promotion.service.model";
 
 @injectable()
 export class PromotionController extends BaseController implements PromotionControllerModels{
     constructor(
         @inject(TYPES.LoggerServiceInterface) private loggerService: LoggerServiceInterface,
-        @inject(TYPES.PromotionAdminService) private promotionAdminService: PromotionAdminServiceInterface,
+        @inject(TYPES.PromotionAdminService) private promotionAdminService: PromotionAdminService,
         @inject(TYPES.PromotionQueryRepository) private promotionQueryRepository: PromotionQueryRepoInterface,
+        @inject(TYPES.BasicAuthMiddleware) private basicAuthMiddleware: BasicAuthMiddleware
     ) {
         super(loggerService);
         this.bindRoutes([
@@ -32,22 +32,24 @@ export class PromotionController extends BaseController implements PromotionCont
                 path: '/admin/login',
                 method: 'post',
                 func: this.login,
-                middlewares: [new ValidateMiddleware(AdminLoginDto)] },
+                middlewares: [new ValMiddleToBasic(), this.basicAuthMiddleware] },
             {
                 path: '/admin/promotions',
                 method: 'get',
                 func: this.promotions,
-                middlewares: [] },
+                middlewares: [new ValidateMiddleware(SuppliersRegisterDto)] },
         ])
     }
+
     async login (req: Request, res: Response, next: NextFunction) : Promise<void>{
         try {
-            const admin = await this.promotionAdminService.loginAdmin(req.body);
-
-            if(!admin){
-                res.status(HTTP_STATUSES.NOT_AUTHORIZATION_401).send({msg: admin})
-                return;
+            const {credEmail} = req.body;
+            if (!credEmail) {
+                res.sendStatus(HTTP_STATUSES.NOT_AUTHORIZATION_401);
+                return
             }
+            const auth = await this.promotionAdminService.loginAdmin(credEmail.email)
+
             res.status(HTTP_STATUSES.CREATED_201).send({msg: 'Успешная авторизация'})
         } catch (err: unknown){
             if (err instanceof Error){

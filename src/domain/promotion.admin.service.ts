@@ -1,4 +1,3 @@
-import {InAdminModel} from "../models/admin-model";
 import {UserQueryRepository} from "../repository/user/user-query-repository";
 import {PromotionAdminServiceInterface} from "../models/admin.promotion.service.model";
 import {inject, injectable} from "inversify";
@@ -10,15 +9,15 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
     constructor(@inject(TYPES.UserQueryRepository) private userQueryRepository: UserQueryRepository,
                 @inject(TYPES.HashServiceInterface) private hashService: HashServiceInterface) {}
 
-    async loginAdmin(body: InAdminModel) {
+    async loginAdmin(email: string, password: string) {
 
-        const credentialLoginOrEmail = await this.userQueryRepository.find(body);
+        const credentialLoginOrEmail = await this.userQueryRepository.find(email);
 
         if (!credentialLoginOrEmail) {
             return null
         }
 
-        return await this.hashService.comparePassword(body.password, credentialLoginOrEmail.password);
+        return await this.hashService.comparePassword(password, credentialLoginOrEmail.password);
     }
     async createPromotion(): Promise<void> {}
     // получение всех акций из репозитория
