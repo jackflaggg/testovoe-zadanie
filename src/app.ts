@@ -11,6 +11,7 @@ import {PromotionRepoInterface} from "./models/promotion.repository.interface";
 import {PromotionQueryRepoInterface} from "./models/promotion.query.repository.interface";
 import {PromotionController} from "./controllers/promotion.controller";
 import {PromotionAdminServiceInterface} from "./models/admin.promotion.service.model";
+import {HashServiceInterface} from "./models/hash.service.model";
 
 @injectable()
 export class App {
@@ -27,6 +28,7 @@ export class App {
         @inject(TYPES.UserQueryRepository) private userQueryRepository: PromotionQueryRepoInterface,
         @inject(TYPES.PromotionRepository) private promotionRepo: PromotionRepoInterface,
         @inject(TYPES.PromotionQueryRepository) private promotionQueryRepo: PromotionQueryRepoInterface,
+        @inject(TYPES.HashServiceInterface) private hashService: HashServiceInterface,
     ) {
         this.app = express();
         this.port = Number(Settings.port);

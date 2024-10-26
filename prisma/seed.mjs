@@ -1,5 +1,17 @@
 import { PrismaClient } from '@prisma/client'
-
+import bcrypt from 'bcrypt'
+export const hashService = {
+	async _generateHash(password, saltRounds = 10) {
+		// генерируем соль
+		const salt = await bcrypt.genSalt(saltRounds);
+		// генерируем хэш на основе пароля и созданной соли
+		return  await bcrypt.hash(password, salt)
+	},
+	async comparePassword(password, hash) {
+		// сравниваем пароль с хэшом
+		return await bcrypt.compare(password, hash);
+	}
+}
 const prisma = new PrismaClient();
 
 const promotions = [
@@ -23,7 +35,7 @@ const promotions = [
 
 const adminUser = {
 	email: 'rasul@rasul.com',
-	password: '230900',
+	password: await hashService._generateHash('230900'),
 	role: "ADMIN",
 	createdAt:  new Date(),
 	updatedAt: new Date(),

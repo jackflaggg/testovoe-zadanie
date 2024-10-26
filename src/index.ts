@@ -1,5 +1,5 @@
 import {App} from "./app";
-import { Container, ContainerModule, interfaces } from "inversify"
+import {Container, ContainerModule, interfaces} from "inversify"
 import {TYPES} from "./utils/types/types";
 import {LoggerService} from "./domain/logger.service";
 import {LoggerServiceInterface} from "./models/logger.service.model";
@@ -14,6 +14,8 @@ import {UserRepository} from "./repository/user/user-repository";
 import {UserQueryRepository} from "./repository/user/user-query-repository";
 import {PromotionAdminService} from "./domain/promotion.admin.service";
 import {PromotionAdminServiceInterface} from "./models/admin.promotion.service.model";
+import {HashServiceInterface} from "./models/hash.service.model";
+import {HashService} from "./domain/hash.service";
 
 export const appContainers = new ContainerModule((bind: interfaces.Bind): void => {
     bind<LoggerServiceInterface>(TYPES.LoggerServiceInterface).to(LoggerService).inSingletonScope();
@@ -21,6 +23,7 @@ export const appContainers = new ContainerModule((bind: interfaces.Bind): void =
     bind<PromotionControllerModels>(TYPES.PromotionController).to(PromotionController).inSingletonScope();
     bind<PromotionAdminServiceInterface>(TYPES.PromotionAdminService).to(PromotionAdminService).inSingletonScope();
     bind<PromotionRepoInterface>(TYPES.PromotionRepository).to(PromotionRepository).inSingletonScope();
+    bind<HashServiceInterface>(TYPES.HashServiceInterface).to(HashService).inSingletonScope();
     bind<PromotionRepoInterface>(TYPES.UserRepository).to(UserRepository).inSingletonScope();
     bind<PromotionQueryRepoInterface>(TYPES.UserQueryRepository).to(UserQueryRepository).inSingletonScope();
     bind<PromotionQueryRepoInterface>(TYPES.PromotionQueryRepository).to(PromotionQueryRepository).inSingletonScope();

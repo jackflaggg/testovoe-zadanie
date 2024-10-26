@@ -3,12 +3,16 @@ import {UserQueryRepository} from "../repository/user/user-query-repository";
 import {PromotionAdminServiceInterface} from "../models/admin.promotion.service.model";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../utils/types/types";
+import {HashServiceInterface} from "../models/hash.service.model";
 
 @injectable()
 export class PromotionAdminService implements PromotionAdminServiceInterface{
-    constructor(@inject(TYPES.UserQueryRepository) private userQueryRepository: UserQueryRepository) {}
+    constructor(@inject(TYPES.UserQueryRepository) private userQueryRepository: UserQueryRepository,
+                @inject(TYPES.HashServiceInterface) private hashService: HashServiceInterface) {}
 
     async loginAdmin(body: InAdminModel) {
+        const {email, password} = body;
+
         const findAdmin = await this.userQueryRepository.find(body);
         return findAdmin;
     }
