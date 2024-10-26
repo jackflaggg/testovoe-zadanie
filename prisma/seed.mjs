@@ -33,6 +33,10 @@ const adminUser = {
 async function bootstrap() {
 	try {
 		await prisma.$connect();
+
+		await prisma.promotionModel.deleteMany({});
+		await prisma.userModel.deleteMany({});
+
 		const createdUser = await prisma.userModel.create({ data: adminUser });
 
 		const promotionsWithSupplierId = promotions.map(promo => ({
