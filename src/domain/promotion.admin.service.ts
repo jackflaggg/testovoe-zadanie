@@ -11,10 +11,14 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
                 @inject(TYPES.HashServiceInterface) private hashService: HashServiceInterface) {}
 
     async loginAdmin(body: InAdminModel) {
-        const {email, password} = body;
 
-        const findAdmin = await this.userQueryRepository.find(body);
-        return findAdmin;
+        const credentialLoginOrEmail = await this.userQueryRepository.find(body);
+
+        if (!credentialLoginOrEmail) {
+            return null
+        }
+
+        return await this.hashService.comparePassword(body.password, credentialLoginOrEmail.password);
     }
     async createPromotion(): Promise<void> {}
     // получение всех акций из репозитория

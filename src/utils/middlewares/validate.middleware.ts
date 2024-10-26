@@ -10,7 +10,7 @@ export class ValidateMiddleware implements MiddlewareInterface {
     execute(req: Request, res: Response, next: NextFunction): void {
 
         const instance = plainToInstance(this.classToValidate, req.body);
-        console.log(instance)
+
         validate(instance).then((err) => {
             if (err.length) {
                 res.status(HTTP_STATUSES.NOT_HELP_CONTENT_422).send({errorsMessages: err});

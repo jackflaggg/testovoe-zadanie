@@ -13,7 +13,8 @@ export class UserQueryRepository implements PromotionQueryRepoInterface {
     async find(body: InAdminModel) {
         const {email, password} = body;
         try {
-            return await this.prismaService.client.userModel.findFirst({where: {email, password}});
+            console.log(email, password)
+            return await this.prismaService.client.userModel.findFirst({where: {email}});
         } catch (err: unknown){
             this.logger.error('Возникла ошибка во время поиска юзера:', err);
             return null;
