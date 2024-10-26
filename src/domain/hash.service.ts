@@ -7,7 +7,7 @@ import {LoggerServiceInterface} from "../models/logger.service.model";
 export class HashService {
     constructor(@inject(TYPES.LoggerServiceInterface) private readonly logger: LoggerServiceInterface) {
     }
-    async _generateHash(password: string, saltRounds: number = 10){
+    async _generateHash(password: string, saltRounds: number = 10): Promise<string | null> {
         try {
             const salt = await bcrypt.genSalt(saltRounds);
             return await bcrypt.hash(password, salt);
@@ -16,7 +16,7 @@ export class HashService {
             return null;
         }
     }
-    async comparePassword(password: string, hash: string){
+    async comparePassword(password: string, hash: string): Promise<boolean | null>{
         try {
             return await bcrypt.compare(password, hash);
         } catch (err: unknown) {
