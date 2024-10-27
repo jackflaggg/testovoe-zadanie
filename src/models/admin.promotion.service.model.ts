@@ -7,4 +7,5 @@ export interface PromotionAdminServiceInterface {
      createSupplier: (login: string, email: string, password: string)=> any ;
      deleteSupplier: (id: string)=> any ;
      statusPromoToSupplier: (id: string)=> any ;
+     loginUser: (email: string, password: string) => any ;
 }

@@ -128,5 +128,8 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
     async deleteSupplier(id: string): Promise<any> {
         return await this.userRepository.deleteUser(Number(id));
     }
+    async loginUser(email: string, password: string): Promise<any> {
+
+    }
     async statusPromoToSupplier(id: string): Promise<void> {}
 }

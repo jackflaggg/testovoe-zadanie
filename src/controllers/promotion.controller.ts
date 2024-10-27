@@ -86,7 +86,7 @@ export class PromotionController extends BaseController implements PromotionCont
             {
                 path: '/promotion/refresh-token',
                 method: 'post',
-                func: this.loginAdmin,
+                func: this.refreshToken,
                 middlewares: [this.basicAuthMiddleware]
             },
         ])
@@ -242,6 +242,16 @@ export class PromotionController extends BaseController implements PromotionCont
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
         return;
     };
-    async loginSupplier (req: Request, res: Response, next: NextFunction) : Promise<void>{};
+    async loginSupplier (req: Request, res: Response, next: NextFunction) : Promise<void>{
+        const { email, password } = req.body;
+        const existingUser = await this.userQueryRepository.findByEmailSupplier(email);
+
+        if (!existingUser){
+            res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+            return;
+        }
+
+        const loginUser = await this.promotionAdminService.loginUser(email, password);
+    };
     async refreshToken(req: Request, res: Response, next: NextFunction): Promise<void>{};
 }
