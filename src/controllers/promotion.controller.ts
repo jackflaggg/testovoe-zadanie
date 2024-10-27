@@ -59,7 +59,6 @@ export class PromotionController extends BaseController implements PromotionCont
                 func: this.deleteSuppliers,
                 middlewares: [this.basicAuthMiddleware]
             },
-            ///////
             {
                 path: '/admin/promotions',
                 method: 'post',
@@ -177,9 +176,35 @@ export class PromotionController extends BaseController implements PromotionCont
         return
     };
     async createPromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{
+        const {title, description} = req.body;
+        const adminId = await this.userQueryRepository.findByEmailSupplier(Settings.admin.split(':')[0]);
 
+        if (!adminId){
+            this.loggerService.log("[admin] не был найден в репозитории");
+            res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+            return
+        }
+
+        const createdPromotion = await this.promotionAdminService.createPromotion(title, description, String(adminId.id));
+        if (!createdPromotion){
+            res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400);
+            return
+        }
+        const newPromotion = await this.userQueryRepository.findId(createdPromotion.id);
+        if (!newPromotion){
+            res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+            return;
+        }
+        res.status(HTTP_STATUSES.CREATED_201).send({data: newPromotion});
+        return;
     };
     async deletePromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{};
-    async updatePromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{};
+    async updatePromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{
+        const {title, description} = req.body;
+        const {id} = req.params;
+
+        const updatedPromotion = await this.promotionAdminService.upda
+
+    };
     async loginSupplier (req: Request, res: Response, next: NextFunction) : Promise<void>{};
 }

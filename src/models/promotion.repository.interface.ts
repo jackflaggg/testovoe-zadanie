@@ -1,7 +1,17 @@
+export interface createPromotionInterface {
+    title: string,
+    description: string,
+    published: boolean,
+    status: string,
+    supplier: {
+        connect: { id : number}
+    }
+}
+
 export interface PromotionRepoInterface {
-    create: (body: any) => any
-    update: (body: any, idPromotion: number) => any
-    delete: (id: number) => any
+    createPromotion: (body: createPromotionInterface) => any
+    updatePromotion: (body: any, idPromotion: number) => any
+    deletePromotion: (id: number) => any
 }
 
 export interface UserRepoInterface {

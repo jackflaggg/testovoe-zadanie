@@ -15,14 +15,12 @@ export class PromotionsCreateDto{
 
 export class PromotionsUpdateDto{
     @IsEmail({}, { message: 'Неверно указан email'})
-    @IsOptional()
-    email?: string;
+    email: string;
 
     @IsString({ message: 'Не указан пароль' })
-    @IsOptional()
-    password?: string;
+    password: string;
 
-    constructor(email?: string, password?: string) {
+    constructor(email: string, password: string) {
         this.email = email;
         this.password = password;
     }

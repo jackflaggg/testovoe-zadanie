@@ -6,6 +6,7 @@ import {HashServiceInterface} from "../models/hash.service.model";
 import {UserRepository} from "../repository/user/user-repository";
 import {errUnique} from "../models/err-unique-interface";
 import {LoggerService} from "./logger.service";
+import {createPromotionInterface, PromotionRepoInterface} from "../models/promotion.repository.interface";
 
 @injectable()
 export class PromotionAdminService implements PromotionAdminServiceInterface{
@@ -13,7 +14,8 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
                 @inject(TYPES.HashServiceInterface) private hashService: HashServiceInterface,
                 @inject(TYPES.ErrorsUnique) private errorsUnique: errUnique,
                 @inject(TYPES.UserRepository) private userRepository: UserRepository,
-                @inject(TYPES.LoggerServiceInterface) private loggerService: LoggerService,) {}
+                @inject(TYPES.LoggerServiceInterface) private loggerService: LoggerService,
+                @inject(TYPES.PromotionRepository) private promotionRepo: PromotionRepoInterface,) {}
 
     async loginAdmin(email: string, password: string) {
 
@@ -25,7 +27,24 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
 
         return await this.hashService.comparePassword(password, credentialLoginOrEmail.password);
     }
-    async createPromotion(): Promise<void> {}
+    async createPromotion(title: string, description: string, supplierId: string): Promise<any> {
+        const body: createPromotionInterface = {
+            title,
+            description,
+            published: true,
+            status: "APPROVED",
+            supplier: {
+                connect: { id : Number(supplierId) },
+            }
+        }
+        const promotion = await this.promotionRepo.createPromotion(body);
+        if (!promotion) {
+            this.loggerService.error('Возникла ошибка во время создания акции')
+            return null;
+        }
+        return promotion
+
+    }
     // получение всех акций из репозитория
     async deletePromotion(id: string): Promise<void> {}
 
@@ -66,6 +85,9 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
             status: 'Success',
             data: createUser
         };
+
+    }
+    async updatePromotion(title: string, description: string, supplierId: string): Promise<any> {
 
     }
     async updatePasswordSupplier(id: string, password: string): Promise<any> {

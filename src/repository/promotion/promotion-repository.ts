@@ -1,17 +1,16 @@
-import {PromotionRepoInterface} from "../../models/promotion.repository.interface";
+import {createPromotionInterface, PromotionRepoInterface} from "../../models/promotion.repository.interface";
 import {inject, injectable} from "inversify";
 import 'reflect-metadata'
 import {TYPES} from "../../utils/types/types";
 import {PrismaService } from "../../db/db";
 import {LoggerServiceInterface} from "../../models/logger.service.model";
-import {PromotionModel} from "@prisma/client";
 
 //TODO: Вернуться и дотипизировать ответы
 @injectable()
 export class PromotionRepository implements PromotionRepoInterface  {
     constructor(@inject(TYPES.PrismaService) private prisma: PrismaService,
                 @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface) {}
-    async create(body: PromotionModel) {
+    async createPromotion(body: createPromotionInterface) {
         try {
             return await this.prisma.client.promotionModel.create({
                 data: body
@@ -22,7 +21,7 @@ export class PromotionRepository implements PromotionRepoInterface  {
         }
     }
 
-    async delete(id: number) {
+    async deletePromotion(id: number) {
         try {
             return await this.prisma.client.promotionModel.delete({where: {id: id}});
         } catch (err: unknown){
@@ -31,7 +30,7 @@ export class PromotionRepository implements PromotionRepoInterface  {
         }
     }
 
-    async update(body: any, idPromotion: number) {
+    async updatePromotion(body: any, idPromotion: number) {
         try {
             return await this.prisma.client.promotionModel.update({where: { id: idPromotion }, data: body});
         } catch (err: unknown){
