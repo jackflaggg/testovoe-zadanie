@@ -175,7 +175,9 @@ export class PromotionController extends BaseController implements PromotionCont
         res.status(HTTP_STATUSES.CREATED_201).send(deleteSupplier);
         return
     };
-    async createPromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{};
+    async createPromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{
+        
+    };
     async deletePromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{};
     async updatePromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{};
     async loginSupplier (req: Request, res: Response, next: NextFunction) : Promise<void>{};
