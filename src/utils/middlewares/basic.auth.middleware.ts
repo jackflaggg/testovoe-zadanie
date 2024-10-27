@@ -2,7 +2,7 @@ import {MiddlewareInterface} from "../../models/middleware.interface";
 import {NextFunction, Request, Response} from "express";
 import {HTTP_STATUSES} from "../../models/http-statuses.models";
 import {validationResult} from "express-validator";
-import {fromBase64ToUTF8, fromUTF8ToBase64} from "../features/UTF8ToBase64";
+import {fromUTF8ToBase64} from "../features/UTF8ToBase64";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../types/types";
 import {UserQueryRepository} from "../../repository/user/user-query-repository";
