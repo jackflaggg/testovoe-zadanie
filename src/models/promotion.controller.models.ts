@@ -10,4 +10,5 @@ export interface PromotionControllerModels {
     deletePromotion: (req: Request, res: Response, next: NextFunction) => Promise<void>;
     updatePromotion: (req: Request, res: Response, next: NextFunction) => Promise<void>;
     loginSupplier: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+    refreshToken: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 }

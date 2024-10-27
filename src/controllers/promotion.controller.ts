@@ -76,6 +76,19 @@ export class PromotionController extends BaseController implements PromotionCont
                 func: this.deletePromotion,
                 middlewares: [this.basicAuthMiddleware]
             },
+            ///////////
+            {
+                path: '/promotion/login',
+                method: 'post',
+                func: this.loginSupplier,
+                middlewares: [this.basicAuthMiddleware]
+            },
+            {
+                path: '/promotion/refresh-token',
+                method: 'post',
+                func: this.loginAdmin,
+                middlewares: [this.basicAuthMiddleware]
+            },
         ])
     }
 
@@ -230,4 +243,5 @@ export class PromotionController extends BaseController implements PromotionCont
         return;
     };
     async loginSupplier (req: Request, res: Response, next: NextFunction) : Promise<void>{};
+    async refreshToken(req: Request, res: Response, next: NextFunction): Promise<void>{};
 }
