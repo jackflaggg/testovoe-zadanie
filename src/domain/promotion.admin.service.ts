@@ -46,7 +46,13 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
 
     }
     // получение всех акций из репозитория
-    async deletePromotion(id: string): Promise<void> {}
+    async deletePromotion(id: number): Promise<any> {
+        const delPromo =  await this.promotionRepo.deletePromotion(id);
+        if (!delPromo) {
+            return null;
+        }
+        return delPromo
+    }
 
     async createSupplier(email: string, password: string) {
         const uniqueErrors = await this.errorsUnique.checkUnique(email);

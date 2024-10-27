@@ -198,7 +198,20 @@ export class PromotionController extends BaseController implements PromotionCont
         res.status(HTTP_STATUSES.CREATED_201).send({data: newPromotion});
         return;
     };
-    async deletePromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{};
+    async deletePromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{
+        const {id} = req.params;
+        if (!id){
+            this.loggerService.log('[userError] вы забыли указать данные')
+            res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400);
+            return;
+        }
+        const existingPromotion = await this.promotionQueryRepository.findPromotion(Number(id));
+        if (!existingPromotion){
+            res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+            return
+        }
+        const deletePromotion = await this.promotionAdminService.deletePromotion(+existingPromotion.id);
+    };
     async updatePromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{
         const {title, description} = req.body;
         const {id} = req.params;
