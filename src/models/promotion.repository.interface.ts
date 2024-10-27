@@ -1,3 +1,5 @@
+import {UserModel} from "@prisma/client";
+
 export interface createPromotionInterface {
     title: string,
     description: string,
@@ -15,8 +17,8 @@ export interface PromotionRepoInterface {
 }
 
 export interface UserRepoInterface {
-    createUser: (body: any) => any
-    updateUser: (password: string, id: number) => any
-    deleteUser: (id: number) => any
+    createUser: (body: any) => Promise<UserModel | null>
+    updateUser: (password: string, id: number) =>  Promise<UserModel | null>
+    deleteUser: (id: number) => Promise<UserModel | null>
 }
 

@@ -10,7 +10,7 @@ import {UserModel} from "@prisma/client";
 export class UserRepository implements UserRepoInterface {
     constructor(@inject(TYPES.PrismaService) private prismaService: PrismaService,
                 @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface) {}
-    async createUser(body: CreateUserDto)  {
+    async createUser(body: CreateUserDto): Promise<UserModel | null>  {
         try {
             return await this.prismaService.client.userModel.create({
                 data: {
@@ -24,7 +24,7 @@ export class UserRepository implements UserRepoInterface {
             return null;
         }
     }
-    async updateUser(password: string, id: number) {
+    async updateUser(password: string, id: number): Promise<UserModel | null> {
         try {
             return await this.prismaService.client.userModel.update({
                 where: {id},
