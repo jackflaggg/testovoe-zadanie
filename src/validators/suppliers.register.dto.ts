@@ -12,3 +12,12 @@ export class SuppliersRegisterDto{
         this.password = password;
     }
 }
+
+export class SupplierUpdateDto{
+    @IsString({ message: 'Не указан пароль' })
+    password: string;
+
+    constructor(password: string) {
+        this.password = password;
+    }
+}

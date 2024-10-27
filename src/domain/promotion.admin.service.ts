@@ -28,27 +28,7 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
     async createPromotion(): Promise<void> {}
     // получение всех акций из репозитория
     async deletePromotion(id: string): Promise<void> {}
-    async updatePromotion(id: string, password: string): Promise<any> {
-        const existingSup = await this.userQueryRepository.findId(Number(id));
 
-        if (!existingSup) {
-            this.loggerService.log('[PromotionAdminService] не существует юзера')
-            return null;
-        }
-
-        const hashPassword = await this.hashService._generateHash(password);
-        if (!hashPassword) {
-            this.loggerService.log('[hashService] ошибка при хэшировании')
-            return null;
-        }
-        const compareHashAndPassword = await this.hashService.comparePassword(password, hashPassword);
-        if (!compareHashAndPassword) {
-            this.loggerService.log('[hashService] ошибка при перепроверке паролей')
-            return null;
-        }
-
-        const updateUser = await this.userRepository.updateUser(hashPassword, Number(id))
-    }
     async createSupplier(email: string, password: string) {
         const uniqueErrors = await this.errorsUnique.checkUnique(email);
         console.log(uniqueErrors)
@@ -88,7 +68,31 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
         };
 
     }
-    async updatePasswordSupplier(): Promise<void> {}
+    async updatePasswordSupplier(id: string, password: string): Promise<any> {
+
+        const hashPassword = await this.hashService._generateHash(password);
+
+        if (!hashPassword) {
+            this.loggerService.log('[hashService] ошибка при хэшировании')
+            return null;
+        }
+
+        const compareHashAndPassword = await this.hashService.comparePassword(password, hashPassword);
+
+        if (!compareHashAndPassword) {
+            this.loggerService.log('[hashService] ошибка при перепроверке паролей')
+            return null;
+        }
+
+        const updateUser = await this.userRepository.updateUser(hashPassword, Number(id));
+
+        if (!updateUser) {
+            this.loggerService.log('[userRepository] непредвиденная ошибка на стороне сервера при обнове данных');
+            return null;
+        }
+
+        return updateUser;
+    }
     async deleteSupplier(id: string): Promise<void> {}
     async statusPromoToSupplier(id: string): Promise<void> {}
 }

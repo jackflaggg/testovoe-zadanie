@@ -1,9 +1,8 @@
-import {PromotionRepoInterface, UserRepoInterface} from "../../models/promotion.repository.interface";
+import {UserRepoInterface} from "../../models/promotion.repository.interface";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../utils/types/types";
 import {PrismaService} from "../../db/db";
 import {LoggerServiceInterface} from "../../models/logger.service.model";
-import {UserModel} from "@prisma/client";
 import {CreateUserDto} from "../../models/UserRepository.models";
 
 @injectable()
@@ -20,7 +19,7 @@ export class UserRepository implements UserRepoInterface {
                 }
             });
         } catch (err: unknown){
-            this.logger.error('Возникла ошибка во время создания акции:', err);
+            this.logger.error('Возникла ошибка во время создания акции: ', err);
             return null;
         }
     }
@@ -33,7 +32,7 @@ export class UserRepository implements UserRepoInterface {
                 }
             });
         } catch (err: unknown){
-            this.logger.error('Возникла ошибка во время создания акции:', err);
+            this.logger.error('Возникла ошибка во время обновления юзера: ', err);
             return null;
         }
     }
@@ -45,7 +44,7 @@ export class UserRepository implements UserRepoInterface {
                 }
             });
         } catch (err: unknown){
-            this.logger.error('Возникла ошибка во время создания акции:', err);
+            this.logger.error('Возникла ошибка во время удаления юзера: ', err);
             return null;
         }
     }

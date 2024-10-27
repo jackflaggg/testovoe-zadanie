@@ -6,7 +6,7 @@ import {LoggerServiceInterface} from "../models/logger.service.model";
 import {NextFunction, Request, Response} from "express";
 import {PromotionControllerModels} from "../models/promotion.controller.models";
 import {ValidateMiddleware} from "../utils/middlewares/validate.middleware";
-import {SuppliersRegisterDto} from "../validators/suppliers.register.dto";
+import {SuppliersRegisterDto, SupplierUpdateDto} from "../validators/suppliers.register.dto";
 import {queryHelperToPromotions} from "../utils/mapper/helper.query.get";
 import {PromotionQueryRepoInterface} from "../models/promotion.query.repository.interface";
 import {HTTP_STATUSES} from "../models/http-statuses.models";
@@ -42,12 +42,12 @@ export class PromotionController extends BaseController implements PromotionCont
                 path: '/admin/promotions',
                 method: 'get',
                 func: this.promotions,
-                middlewares: [new ValidateMiddleware(SuppliersRegisterDto)] },
+                middlewares: [this.basicAuthMiddleware] },
             {
-                path: '/admin/promotion/:id',
+                path: '/admin/supplier/:id',
                 method: 'put',
-                func: this.updatePromotion,
-                middlewares: [this.basicAuthMiddleware, new ValMiddleToBasic()]
+                func: this.updateSuppliers,
+                middlewares: [this.basicAuthMiddleware, new ValidateMiddleware(SupplierUpdateDto)]
             }
         ])
     }
@@ -101,7 +101,29 @@ export class PromotionController extends BaseController implements PromotionCont
     async updateSuppliers (req: Request, res: Response, next: NextFunction) : Promise<void> {
         const { password } = req.body;
         const { id } = req.params;
-        const updateSupplier = await this.promotionAdminService.updatePromotion(id, password);
+
+        if (!id){
+            this.loggerService.log('[userError] забыли ввести данные');
+            res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400);
+            return
+        }
+
+        const existingSupplier = await this.userQueryRepository.findId(Number(id));
+
+        if (!existingSupplier) {
+            this.loggerService.log('[userQueryRepository] не существует юзера')
+            res.status(HTTP_STATUSES.NOT_FOUND_404).send({data: null});
+            return;
+        }
+
+        const updateSupplier = await this.promotionAdminService.updatePasswordSupplier(id, password);
+        if (!updateSupplier){
+            res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400);
+            return
+        }
+        res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
+        return
+
     };
     async deleteSuppliers (req: Request, res: Response, next: NextFunction) : Promise<void> {};
     async createPromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{};
