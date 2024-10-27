@@ -9,9 +9,9 @@ import {queryHelperToPromotion} from "../../utils/mapper/InQueryPromotion.mapper
 export class UserQueryRepository implements UserQueryRepoInterface {
     constructor(@inject(TYPES.PrismaService) private prismaService: PrismaService,
                 @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface) {}
-    async find( email: string) {
+    async findId( id: number) {
         try {
-            return await this.prismaService.client.userModel.findFirst({where: {email}});
+            return await this.prismaService.client.userModel.findFirst({where: {id}});
         } catch (err: unknown){
             this.logger.error('Возникла ошибка во время поиска юзера:', err);
             return null;
@@ -51,10 +51,15 @@ export class UserQueryRepository implements UserQueryRepoInterface {
     }
 
     async findByEmailSupplier(email: string) {
-        const searchEmail = await this.prismaService.client.userModel.findFirst({where: {email}});
-        if (!searchEmail || !searchEmail.id) {
+        try {
+            const searchEmail = await this.prismaService.client.userModel.findFirst({where: {email}});
+            if (!searchEmail || !searchEmail.id) {
+                return null;
+            }
+            return searchEmail
+        } catch(err: unknown){
+            this.logger.error('Возникла ошибка во время получения всех юзеров:', err);
             return null;
         }
-        return searchEmail
     }
 }

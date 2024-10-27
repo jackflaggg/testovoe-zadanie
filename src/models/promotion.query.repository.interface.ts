@@ -5,6 +5,6 @@ export interface PromotionQueryRepoInterface {
 
 export interface UserQueryRepoInterface {
     getAll(queryParamsTo: any): any;
-    find(id: any): any;
+    findId(id: any): any;
     findByEmailSupplier(email: string): any;
 }

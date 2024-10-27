@@ -3,7 +3,7 @@ export interface PromotionAdminServiceInterface {
  createPromotion: () => any ;
 // получение всех акций из репозитория
  deletePromotion: (id: string)=> any ;
- updatePromotion: (id: string)=> any ;
+ updatePromotion: (id: string, password: string)=> any ;
  createSupplier: (login: string, email: string, password: string)=> any ;
  updatePasswordSupplier: ()=> any ;
  deleteSupplier: (id: string)=> any ;

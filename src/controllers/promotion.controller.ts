@@ -43,6 +43,12 @@ export class PromotionController extends BaseController implements PromotionCont
                 method: 'get',
                 func: this.promotions,
                 middlewares: [new ValidateMiddleware(SuppliersRegisterDto)] },
+            {
+                path: '/admin/promotion/:id',
+                method: 'put',
+                func: this.updatePromotion,
+                middlewares: [this.basicAuthMiddleware, new ValMiddleToBasic()]
+            }
         ])
     }
 
@@ -83,7 +89,7 @@ export class PromotionController extends BaseController implements PromotionCont
                 .send(createdSupplier.extensions)
             return;
         }
-        const supplier = await this.userQueryRepository.find(createdSupplier.data.email);
+        const supplier = await this.userQueryRepository.findByEmailSupplier(createdSupplier.data.email);
         if (!supplier){
             this.loggerService.log("[supplier] не был найден в репозитории");
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
@@ -92,4 +98,14 @@ export class PromotionController extends BaseController implements PromotionCont
         res.status(HTTP_STATUSES.CREATED_201).send(supplier);
         return;
     };
+    async updateSuppliers (req: Request, res: Response, next: NextFunction) : Promise<void> {
+        const { password } = req.body;
+        const { id } = req.params;
+        const updateSupplier = await this.promotionAdminService.updatePromotion(id, password);
+    };
+    async deleteSuppliers (req: Request, res: Response, next: NextFunction) : Promise<void> {};
+    async createPromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{};
+    async deletePromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{};
+    async updatePromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{};
+    async loginSupplier (req: Request, res: Response, next: NextFunction) : Promise<void>{};
 }

@@ -15,7 +15,7 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
 
     async loginAdmin(email: string, password: string) {
 
-        const credentialLoginOrEmail = await this.userQueryRepository.find(email);
+        const credentialLoginOrEmail = await this.userQueryRepository.findByEmailSupplier(email);
 
         if (!credentialLoginOrEmail) {
             return null
@@ -26,7 +26,9 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
     async createPromotion(): Promise<void> {}
     // получение всех акций из репозитория
     async deletePromotion(id: string): Promise<void> {}
-    async updatePromotion(id: string): Promise<void> {}
+    async updatePromotion(id: string, password: string): Promise<void> {
+        const existingSup = await this.userQueryRepository.findId(Number(id))
+    }
     async createSupplier(email: string, password: string) {
         const uniqueErrors = await this.errorsUnique.checkUnique(email);
         console.log(uniqueErrors)
