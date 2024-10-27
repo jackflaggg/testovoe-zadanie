@@ -8,6 +8,7 @@ import {errUnique} from "../models/err-unique-interface";
 import {LoggerService} from "./logger.service";
 import {createPromotionInterface, PromotionRepoInterface} from "../models/promotion.repository.interface";
 import {JWTService} from "./JWT.service";
+import {UserModel} from "@prisma/client";
 
 @injectable()
 export class PromotionAdminService implements PromotionAdminServiceInterface{
@@ -19,7 +20,7 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
                 @inject(TYPES.PromotionRepository) private promotionRepo: PromotionRepoInterface,
                 @inject(TYPES.JWTService) private jwtService: JWTService,) {}
 
-    async loginAdmin(email: string, password: string) {
+    async loginAdmin(email: string, password: string): Promise<boolean | null> {
 
         const credentialLoginOrEmail = await this.userQueryRepository.findByEmailSupplier(email);
 
@@ -29,7 +30,7 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
 
         return await this.hashService.comparePassword(password, credentialLoginOrEmail.password);
     }
-    async createPromotion(title: string, description: string, supplierId: string): Promise<any> {
+    async createPromotion(title: string, description: string, supplierId: string): Promise<UserModel | null> {
         const body: createPromotionInterface = {
             title,
             description,
@@ -48,7 +49,7 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
 
     }
     // получение всех акций из репозитория
-    async deletePromotion(id: number): Promise<any> {
+    async deletePromotion(id: number): Promise<UserModel | null> {
         const delPromo =  await this.promotionRepo.deletePromotion(id);
         if (!delPromo) {
             return null;
@@ -56,9 +57,9 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
         return delPromo
     }
 
-    async createSupplier(email: string, password: string) {
+    async createSupplier(email: string, password: string): Promise<any> {
         const uniqueErrors = await this.errorsUnique.checkUnique(email);
-        console.log(uniqueErrors)
+
         if (uniqueErrors) {
             return {
                 status: 'BadRequest',
@@ -95,14 +96,14 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
         };
 
     }
-    async updatePromotion(title: string, description: string, promotionId: string): Promise<any> {
+    async updatePromotion(title: string, description: string, promotionId: string): Promise<UserModel | null> {
         const upPromotion = await this.promotionRepo.updatePromotion({title, description}, Number(promotionId));
         if (!upPromotion) {
             return null
         }
         return upPromotion;
     }
-    async updatePasswordSupplier(id: string, password: string): Promise<any> {
+    async updatePasswordSupplier(id: string, password: string): Promise<UserModel | null> {
 
         const hashPassword = await this.hashService._generateHash(password);
 
@@ -127,10 +128,10 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
 
         return updateUser;
     }
-    async deleteSupplier(id: string): Promise<any> {
+    async deleteSupplier(id: string): Promise<UserModel | null> {
         return await this.userRepository.deleteUser(Number(id));
     }
-    async loginUser(email: string, password: string): Promise<any> {
+    async loginUser(email: string, password: string): Promise<{jwtToken: string, refreshToken: string} | null> {
         const hashPassword = await this.hashService._generateHash(password);
 
         if (!hashPassword) {
