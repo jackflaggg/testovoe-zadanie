@@ -137,13 +137,15 @@ export class PromotionController extends BaseController implements PromotionCont
             res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400);
             return;
         }
-        const existingSupplier = await this.userQueryRepository.findId(Number(id));
+
+        const existingSupplier = await this.userQueryRepository.findId(Number(req.params.id));
         if (!existingSupplier) {
             this.loggerService.log('[userQueryRepository] не существует юзера')
             res.status(HTTP_STATUSES.NOT_FOUND_404).send({data: null});
             return;
         }
-        const deleteSupplier = await this.promotionAdminService.deleteSupplier(id);
+
+        const deleteSupplier = await this.promotionAdminService.deleteSupplier(req.params.id);
         if (!deleteSupplier){
             this.loggerService.log('[userRepository] произошла ошибка при удалении юзера')
             res.status(HTTP_STATUSES.BAD_REQUEST_400).send({data: null});
