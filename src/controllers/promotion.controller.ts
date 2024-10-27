@@ -18,6 +18,7 @@ import {PromotionAdminService} from "../domain/promotion.admin.service";
 import {Settings} from "../settings";
 import {OutCreateSupplierErrors} from "../utils/features/outCreateSuuplier.errors";
 import {UserQueryRepository} from "../repository/user/user-query-repository";
+import {PromotionsCreateDto, PromotionsUpdateDto} from "../validators/promotions.dto";
 
 @injectable()
 export class PromotionController extends BaseController implements PromotionControllerModels{
@@ -63,12 +64,12 @@ export class PromotionController extends BaseController implements PromotionCont
                 path: '/admin/promotions',
                 method: 'post',
                 func: this.createPromotion,
-                middlewares: [this.basicAuthMiddleware] },
+                middlewares: [this.basicAuthMiddleware, new ValidateMiddleware(PromotionsCreateDto)] },
             {
                 path: '/admin/promotions/:id',
                 method: 'put',
                 func: this.updatePromotion,
-                middlewares: [this.basicAuthMiddleware, new ValidateMiddleware(SupplierUpdateUserDto)]
+                middlewares: [this.basicAuthMiddleware, new ValidateMiddleware(PromotionsUpdateDto)]
             },
             {
                 path: '/admin/promotions/:id',
@@ -176,7 +177,7 @@ export class PromotionController extends BaseController implements PromotionCont
         return
     };
     async createPromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{
-        
+
     };
     async deletePromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{};
     async updatePromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{};
