@@ -5,14 +5,14 @@ export class SuppliersRegisterDto{
     email: string;
 
     @IsString({ message: 'Не указано имя' })
-    name: string;
+    login: string;
 
     @IsString({ message: 'Не указан пароль' })
     password: string;
 
-    constructor(email: string, name: string, password: string) {
+    constructor(login: string, email: string, password: string) {
+        this.login = login;
         this.email = email;
-        this.name = name;
         this.password = password;
     }
 }

@@ -10,4 +10,5 @@ export const TYPES = {
     PromotionRepository: Symbol.for("PromotionRepository"),
     HashServiceInterface: Symbol.for("HashServiceInterface"),
     BasicAuthMiddleware: Symbol.for("BasicAuthMiddleware"),
+    ErrorsUnique: Symbol.for("ErrorsUnique"),
 }

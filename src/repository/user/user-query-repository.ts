@@ -4,6 +4,7 @@ import {PrismaService} from "../../db/db";
 import {LoggerServiceInterface} from "../../models/logger.service.model";
 import {PromotionQueryRepoInterface} from "../../models/promotion.query.repository.interface";
 import {queryHelperToPromotion} from "../../utils/mapper/InQueryPromotion.mapper";
+import * as sea from "node:sea";
 
 @injectable()
 export class UserQueryRepository implements PromotionQueryRepoInterface {
@@ -48,5 +49,13 @@ export class UserQueryRepository implements PromotionQueryRepoInterface {
             this.logger.error('Возникла ошибка во время получения всех юзеров:', err);
             return null;
         }
+    }
+
+    async findByEmailSupplier(email: string) {
+        const searchEmail = await this.prismaService.client.userModel.findFirst({where: {email}});
+        if (!searchEmail || !searchEmail.id) {
+            return null;
+        }
+        return searchEmail
     }
 }

@@ -13,6 +13,7 @@ import {HTTP_STATUSES} from "../models/http-statuses.models";
 import {BasicAuthMiddleware, ValMiddleToBasic} from "../utils/middlewares/basic.auth.middleware";
 import {PromotionAdminService} from "../domain/promotion.admin.service";
 import {Settings} from "../settings";
+import {OutCreateSupplierErrors} from "../utils/features/outCreateSuuplier.errors";
 
 @injectable()
 export class PromotionController extends BaseController implements PromotionControllerModels{
@@ -25,10 +26,10 @@ export class PromotionController extends BaseController implements PromotionCont
         super(loggerService);
         this.bindRoutes([
             {
-                path: '/register',
+                path: '/admin/register',
                 method: 'post',
-                func: (req: Request, Response: Response, next: NextFunction) => ({}),
-                middlewares: [new ValidateMiddleware(SuppliersRegisterDto)] },
+                func: this.registerSuppliers,
+                middlewares: [this.basicAuthMiddleware, new ValidateMiddleware(SuppliersRegisterDto)] },
             {
                 path: '/admin/login',
                 method: 'post',
@@ -69,5 +70,16 @@ export class PromotionController extends BaseController implements PromotionCont
         const allPromotions = await this.promotionQueryRepository.getAll(sortData);
         this.ok(res, allPromotions);
     };
-    async suppliers () : Promise<void> {};
+    async registerSuppliers (req: Request, res: Response, next: NextFunction) : Promise<void> {
+        const {login, password} = req.body;
+
+        const createdSupplier = await this.promotionAdminService.createSupplier(login, password);
+        if (createdSupplier instanceof OutCreateSupplierErrors){
+            this.loggerService.log('[promotionAdminService] в сервисе вернул непредвиденные данные');
+            res
+                .status(HTTP_STATUSES.BAD_REQUEST_400)
+                .send(createdSupplier.extensions)
+            return;
+        }
+    };
 }

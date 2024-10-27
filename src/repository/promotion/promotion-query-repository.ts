@@ -7,7 +7,7 @@ import {LoggerServiceInterface} from "../../models/logger.service.model";
 import {queryHelperToPromotion} from "../../utils/mapper/InQueryPromotion.mapper";
 
 @injectable()
-export class PromotionQueryRepository implements PromotionQueryRepoInterface {
+export class PromotionQueryRepository {
     constructor(@inject(TYPES.PrismaService) private prismaService: PrismaService,
                 @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface) {}
 

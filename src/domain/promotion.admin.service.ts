@@ -3,11 +3,15 @@ import {PromotionAdminServiceInterface} from "../models/admin.promotion.service.
 import {inject, injectable} from "inversify";
 import {TYPES} from "../utils/types/types";
 import {HashServiceInterface} from "../models/hash.service.model";
+import {ErrorsUnique} from "../utils/features/errors.unique";
+import {UserRepository} from "../repository/user/user-repository";
 
 @injectable()
 export class PromotionAdminService implements PromotionAdminServiceInterface{
     constructor(@inject(TYPES.UserQueryRepository) private userQueryRepository: UserQueryRepository,
-                @inject(TYPES.HashServiceInterface) private hashService: HashServiceInterface) {}
+                @inject(TYPES.HashServiceInterface) private hashService: HashServiceInterface,
+                @inject(TYPES.ErrorsUnique) private errorsUnique: ErrorsUnique,
+                @inject(TYPES.UserRepository) private userRepository: UserRepository,) {}
 
     async loginAdmin(email: string, password: string) {
 
@@ -23,7 +27,41 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
     // получение всех акций из репозитория
     async deletePromotion(id: string): Promise<void> {}
     async updatePromotion(id: string): Promise<void> {}
-    async createSupplier(): Promise<void> {}
+    async createSupplier(email: string, password: string) {
+        const uniqueErrors = this.errorsUnique.checkUnique(email);
+        if (uniqueErrors) {
+            return {
+                status: 'BadRequest',
+                extensions: uniqueErrors,
+                data: null
+            };
+        }
+
+        const passwordHash = await this.hashService._generateHash(password);
+        if (!passwordHash){
+            return {
+                status: 'BadRequest',
+                extensions: passwordHash,
+                data: null
+            };
+        }
+        const newSupplier = {
+            email,
+            password: passwordHash,
+            role: 'SUPPLIER',
+        }
+
+        const createUser = await this.userRepository.create(newSupplier);
+        if (!createUser) {
+            return {
+                status: 'BadRequest',
+                extensions: createUser,
+                data: null
+            };
+        }
+        return createUser;
+
+    }
     async updatePasswordSupplier(): Promise<void> {}
     async deleteSupplier(id: string): Promise<void> {}
     async statusPromoToSupplier(id: string): Promise<void> {}
