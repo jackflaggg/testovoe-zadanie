@@ -8,7 +8,8 @@ import {errUnique} from "../models/err-unique-interface";
 import {LoggerService} from "./logger.service";
 import {createPromotionInterface, PromotionRepoInterface} from "../models/promotion.repository.interface";
 import {JWTService} from "./JWT.service";
-import {UserModel} from "@prisma/client";
+import {PromotionModel, UserModel} from "@prisma/client";
+import {ErrorCreate, SuccessCreate} from "../models/create.supplier.models";
 
 @injectable()
 export class PromotionAdminService implements PromotionAdminServiceInterface{
@@ -30,7 +31,7 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
 
         return await this.hashService.comparePassword(password, credentialLoginOrEmail.password);
     }
-    async createPromotion(title: string, description: string, supplierId: string): Promise<UserModel | null> {
+    async createPromotion(title: string, description: string, supplierId: string): Promise<PromotionModel | null> {
         const body: createPromotionInterface = {
             title,
             description,
@@ -49,7 +50,7 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
 
     }
     // получение всех акций из репозитория
-    async deletePromotion(id: number): Promise<UserModel | null> {
+    async deletePromotion(id: number): Promise<PromotionModel | null> {
         const delPromo =  await this.promotionRepo.deletePromotion(id);
         if (!delPromo) {
             return null;
@@ -57,7 +58,7 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
         return delPromo
     }
 
-    async createSupplier(email: string, password: string): Promise<any> {
+    async createSupplier(email: string, password: string): Promise<ErrorCreate | SuccessCreate> {
         const uniqueErrors = await this.errorsUnique.checkUnique(email);
 
         if (uniqueErrors) {
@@ -96,7 +97,7 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
         };
 
     }
-    async updatePromotion(title: string, description: string, promotionId: string): Promise<UserModel | null> {
+    async updatePromotion(title: string, description: string, promotionId: string): Promise<PromotionModel | null> {
         const upPromotion = await this.promotionRepo.updatePromotion({title, description}, Number(promotionId));
         if (!upPromotion) {
             return null

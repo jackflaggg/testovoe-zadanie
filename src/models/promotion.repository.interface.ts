@@ -1,4 +1,4 @@
-import {UserModel} from "@prisma/client";
+import {PromotionModel, UserModel} from "@prisma/client";
 
 export interface createPromotionInterface {
     title: string,
@@ -11,9 +11,9 @@ export interface createPromotionInterface {
 }
 
 export interface PromotionRepoInterface {
-    createPromotion: (body: createPromotionInterface) => any
-    updatePromotion: (body: any, idPromotion: number) => any
-    deletePromotion: (id: number) => any
+    createPromotion: (body: createPromotionInterface) =>  Promise<PromotionModel | null>
+    updatePromotion: (body: any, idPromotion: number) =>  Promise<PromotionModel | null>
+    deletePromotion: (id: number) =>  Promise<PromotionModel | null>
 }
 
 export interface UserRepoInterface {

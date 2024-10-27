@@ -1,3 +1,5 @@
+import {PromotionModel, UserModel} from "@prisma/client";
+
 export interface ErrorCreate {
     status: string,
     extensions: any,
@@ -6,5 +8,5 @@ export interface ErrorCreate {
 
 export interface SuccessCreate {
     status: string,
-    data: null
+    data: UserModel | PromotionModel
 }
