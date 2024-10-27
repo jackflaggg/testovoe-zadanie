@@ -13,6 +13,7 @@ import {PromotionController} from "./controllers/promotion.controller";
 import {PromotionAdminServiceInterface} from "./models/admin.promotion.service.model";
 import {HashServiceInterface} from "./models/hash.service.model";
 import {BasicAuthMiddleware} from "./utils/middlewares/basic.auth.middleware";
+import {ErrorsUnique} from "./utils/features/errors.unique";
 
 @injectable()
 export class App {
@@ -30,7 +31,7 @@ export class App {
         @inject(TYPES.PromotionRepository) private promotionRepo: PromotionRepoInterface,
         @inject(TYPES.PromotionQueryRepository) private promotionQueryRepo: PromotionQueryRepoInterface,
         @inject(TYPES.HashServiceInterface) private hashService: HashServiceInterface,
-        @inject(TYPES.BasicAuthMiddleware) private basicAuthMiddleware: BasicAuthMiddleware
+        @inject(TYPES.BasicAuthMiddleware) private basicAuthMiddleware: BasicAuthMiddleware,
     ) {
         this.app = express();
         this.port = Number(Settings.port);

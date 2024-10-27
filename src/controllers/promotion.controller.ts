@@ -73,9 +73,9 @@ export class PromotionController extends BaseController implements PromotionCont
         this.ok(res, allPromotions);
     };
     async registerSuppliers (req: Request, res: Response, next: NextFunction) : Promise<void> {
-        const {login, password} = req.body;
+        const {email, password} = req.body;
+        const createdSupplier = await this.promotionAdminService.createSupplier(email, password);
 
-        const createdSupplier = await this.promotionAdminService.createSupplier(login, password);
         if (createdSupplier instanceof OutCreateSupplierErrors || !createdSupplier.data){
             this.loggerService.log('[promotionAdminService] в сервисе вернул непредвиденные данные');
             res

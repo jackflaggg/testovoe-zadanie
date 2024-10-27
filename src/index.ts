@@ -17,6 +17,8 @@ import {PromotionAdminServiceInterface} from "./models/admin.promotion.service.m
 import {HashServiceInterface} from "./models/hash.service.model";
 import {HashService} from "./domain/hash.service";
 import {BasicAuthMiddleware} from "./utils/middlewares/basic.auth.middleware";
+import {ErrorsUnique} from "./utils/features/errors.unique";
+import {errUnique} from "./models/err-unique-interface";
 
 export const appContainers = new ContainerModule((bind: interfaces.Bind): void => {
     bind<LoggerServiceInterface>(TYPES.LoggerServiceInterface).to(LoggerService).inSingletonScope();
@@ -29,6 +31,7 @@ export const appContainers = new ContainerModule((bind: interfaces.Bind): void =
     bind<UserQueryRepoInterface>(TYPES.UserQueryRepository).to(UserQueryRepository).inSingletonScope();
     bind<PromotionQueryRepoInterface>(TYPES.PromotionQueryRepository).to(PromotionQueryRepository).inSingletonScope();
     bind<BasicAuthMiddleware>(TYPES.BasicAuthMiddleware).to(BasicAuthMiddleware).inSingletonScope();
+    bind<errUnique>(TYPES.ErrorsUnique).to(ErrorsUnique).inSingletonScope();
     bind<App>(TYPES.Application).to(App).inSingletonScope();
 })
 

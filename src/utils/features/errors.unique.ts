@@ -3,13 +3,12 @@ import {TYPES} from "../types/types";
 import {LoggerServiceInterface} from "../../models/logger.service.model";
 import {UserQueryRepository} from "../../repository/user/user-query-repository";
 import {ErrorsType} from "../../models/errors.messages";
+import {errUnique} from "../../models/err-unique-interface";
+
 @injectable()
-export class ErrorsUnique {
-    email: string;
+export class ErrorsUnique implements errUnique{
     constructor(@inject(TYPES.LoggerServiceInterface) private readonly loggerService: LoggerServiceInterface,
-                @inject(TYPES.UserQueryRepository) private readonly userQueryRepository: UserQueryRepository,
-                email: string) {
-        this.email = email;
+                @inject(TYPES.UserQueryRepository) private readonly userQueryRepository: UserQueryRepository,) {
     }
     async checkUnique(email: string){
         const errors: ErrorsType = {

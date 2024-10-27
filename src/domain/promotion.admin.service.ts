@@ -3,14 +3,14 @@ import {PromotionAdminServiceInterface} from "../models/admin.promotion.service.
 import {inject, injectable} from "inversify";
 import {TYPES} from "../utils/types/types";
 import {HashServiceInterface} from "../models/hash.service.model";
-import {ErrorsUnique} from "../utils/features/errors.unique";
 import {UserRepository} from "../repository/user/user-repository";
+import {errUnique} from "../models/err-unique-interface";
 
 @injectable()
 export class PromotionAdminService implements PromotionAdminServiceInterface{
     constructor(@inject(TYPES.UserQueryRepository) private userQueryRepository: UserQueryRepository,
                 @inject(TYPES.HashServiceInterface) private hashService: HashServiceInterface,
-                @inject(TYPES.ErrorsUnique) private errorsUnique: ErrorsUnique,
+                @inject(TYPES.ErrorsUnique) private errorsUnique: errUnique,
                 @inject(TYPES.UserRepository) private userRepository: UserRepository,) {}
 
     async loginAdmin(email: string, password: string) {
@@ -28,7 +28,8 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
     async deletePromotion(id: string): Promise<void> {}
     async updatePromotion(id: string): Promise<void> {}
     async createSupplier(email: string, password: string) {
-        const uniqueErrors = this.errorsUnique.checkUnique(email);
+        const uniqueErrors = await this.errorsUnique.checkUnique(email);
+        console.log(uniqueErrors)
         if (uniqueErrors) {
             return {
                 status: 'BadRequest',
