@@ -12,6 +12,7 @@ import {PromotionQueryRepoInterface} from "../models/promotion.query.repository.
 import {HTTP_STATUSES} from "../models/http-statuses.models";
 import {BasicAuthMiddleware, ValMiddleToBasic} from "../utils/middlewares/basic.auth.middleware";
 import {PromotionAdminService} from "../domain/promotion.admin.service";
+import {Settings} from "../settings";
 
 @injectable()
 export class PromotionController extends BaseController implements PromotionControllerModels{
@@ -32,7 +33,8 @@ export class PromotionController extends BaseController implements PromotionCont
                 path: '/admin/login',
                 method: 'post',
                 func: this.login,
-                middlewares: [new ValMiddleToBasic(), this.basicAuthMiddleware] },
+                //TODO: Не прокидывается ошибка в мидлвэйр
+                middlewares: [this.basicAuthMiddleware, new ValMiddleToBasic()] },
             {
                 path: '/admin/promotions',
                 method: 'get',
@@ -43,19 +45,23 @@ export class PromotionController extends BaseController implements PromotionCont
 
     async login (req: Request, res: Response, next: NextFunction) : Promise<void>{
         try {
-            const {credEmail} = req.body;
-            if (!credEmail) {
-                res.sendStatus(HTTP_STATUSES.NOT_AUTHORIZATION_401);
-                return
+            const [email, password] = Settings.admin.split(':');
+
+            const auth = await this.promotionAdminService.loginAdmin(email, password)
+            if (!auth){
+                res.sendStatus(HTTP_STATUSES.NOT_AUTHORIZATION_401)
+                return;
             }
-            const auth = await this.promotionAdminService.loginAdmin(credEmail.email, credEmail.password)
 
             res.status(HTTP_STATUSES.CREATED_201).send({msg: 'Успешная авторизация'})
+            return;
         } catch (err: unknown){
             if (err instanceof Error){
                 this.loggerService.log(err)
+                return;
             }
             this.loggerService.error(err)
+            return;
         }
     };
     async promotions (req: Request, res: Response, next: NextFunction): Promise<void>{

@@ -2,16 +2,16 @@ import {MiddlewareInterface} from "../../models/middleware.interface";
 import {NextFunction, Request, Response} from "express";
 import {HTTP_STATUSES} from "../../models/http-statuses.models";
 import {validationResult} from "express-validator";
-import {fromBase64ToUTF8} from "../features/UTF8ToBase64";
+import {fromBase64ToUTF8, fromUTF8ToBase64} from "../features/UTF8ToBase64";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../types/types";
 import {UserQueryRepository} from "../../repository/user/user-query-repository";
 import {LoggerService} from "../../domain/logger.service";
-@injectable()
+import {Settings} from "../../settings";
+
 export class ValMiddleToBasic implements MiddlewareInterface {
     execute(req: Request, res: Response, next:NextFunction) {
-        const errors = validationResult(req)
-
+        const errors = validationResult(req.headers);
         if (!errors.isEmpty()) {
             const errorsArray = errors.array({ onlyFirstError: true}) as Record<string, string>[]/*{ path: string, msg: string}[]*/;
             res.status(HTTP_STATUSES.BAD_REQUEST_400).send({errors: errorsArray});
@@ -21,7 +21,7 @@ export class ValMiddleToBasic implements MiddlewareInterface {
         next()
     }
 }
-
+@injectable()
 export class BasicAuthMiddleware implements MiddlewareInterface {
     constructor(@inject(TYPES.UserQueryRepository) private readonly userQueryRepository: UserQueryRepository,
                 @inject(TYPES.LoggerServiceInterface) private loggerService: LoggerService,) {
@@ -37,22 +37,22 @@ export class BasicAuthMiddleware implements MiddlewareInterface {
             return;
         }
 
-        const adminEmail = fromBase64ToUTF8(basic).split(':')[0];
+        const adminEmail = fromUTF8ToBase64(Settings.admin);
 
         if (auth.slice(6) !== adminEmail){
             this.loggerService.log('[codedAuthorization] ошибка в декодировании');
             res.sendStatus(HTTP_STATUSES.NOT_AUTHORIZATION_401);
             return;
         }
-
-        const credEmail = await this.userQueryRepository.find(adminEmail);
-
-        if (!credEmail){
-            this.loggerService.log(`[userQueryRepository] ошибка в поиске бд`);
-            res.sendStatus(HTTP_STATUSES.NOT_AUTHORIZATION_401);
-            return;
-        }
-        req.body = credEmail;
+        // console.log(fromUTF8ToBase64(auth.slice(6)))
+        // const credEmail = await this.userQueryRepository.find(adminEmail);
+        //
+        // if (!credEmail){
+        //     this.loggerService.log(`[userQueryRepository] ошибка в поиске бд`);
+        //     res.sendStatus(HTTP_STATUSES.NOT_AUTHORIZATION_401);
+        //     return;
+        // }
+        // req.body = credEmail;
         next()
     }
 }

@@ -12,6 +12,7 @@ import {PromotionQueryRepoInterface} from "./models/promotion.query.repository.i
 import {PromotionController} from "./controllers/promotion.controller";
 import {PromotionAdminServiceInterface} from "./models/admin.promotion.service.model";
 import {HashServiceInterface} from "./models/hash.service.model";
+import {BasicAuthMiddleware} from "./utils/middlewares/basic.auth.middleware";
 
 @injectable()
 export class App {
@@ -29,6 +30,7 @@ export class App {
         @inject(TYPES.PromotionRepository) private promotionRepo: PromotionRepoInterface,
         @inject(TYPES.PromotionQueryRepository) private promotionQueryRepo: PromotionQueryRepoInterface,
         @inject(TYPES.HashServiceInterface) private hashService: HashServiceInterface,
+        @inject(TYPES.BasicAuthMiddleware) private basicAuthMiddleware: BasicAuthMiddleware
     ) {
         this.app = express();
         this.port = Number(Settings.port);
@@ -45,7 +47,7 @@ export class App {
     public async init () {
         this.useMiddleware();
         this.useRoutes();
-        const db = await this.prismaService.connect();
+        await this.prismaService.connect();
         this.server = this.app.listen(this.port, () => {
             console.log('Сервер запущен на ' + this.port + ' порту!')
         })
