@@ -14,6 +14,7 @@ import {BasicAuthMiddleware, ValMiddleToBasic} from "../utils/middlewares/basic.
 import {PromotionAdminService} from "../domain/promotion.admin.service";
 import {Settings} from "../settings";
 import {OutCreateSupplierErrors} from "../utils/features/outCreateSuuplier.errors";
+import {UserQueryRepository} from "../repository/user/user-query-repository";
 
 @injectable()
 export class PromotionController extends BaseController implements PromotionControllerModels{
@@ -21,7 +22,8 @@ export class PromotionController extends BaseController implements PromotionCont
         @inject(TYPES.LoggerServiceInterface) private loggerService: LoggerServiceInterface,
         @inject(TYPES.PromotionAdminService) private promotionAdminService: PromotionAdminService,
         @inject(TYPES.PromotionQueryRepository) private promotionQueryRepository: PromotionQueryRepoInterface,
-        @inject(TYPES.BasicAuthMiddleware) private basicAuthMiddleware: BasicAuthMiddleware
+        @inject(TYPES.BasicAuthMiddleware) private basicAuthMiddleware: BasicAuthMiddleware,
+        @inject(TYPES.UserQueryRepository) private userQueryRepository: UserQueryRepository
     ) {
         super(loggerService);
         this.bindRoutes([
@@ -74,12 +76,20 @@ export class PromotionController extends BaseController implements PromotionCont
         const {login, password} = req.body;
 
         const createdSupplier = await this.promotionAdminService.createSupplier(login, password);
-        if (createdSupplier instanceof OutCreateSupplierErrors){
+        if (createdSupplier instanceof OutCreateSupplierErrors || !createdSupplier.data){
             this.loggerService.log('[promotionAdminService] в сервисе вернул непредвиденные данные');
             res
                 .status(HTTP_STATUSES.BAD_REQUEST_400)
                 .send(createdSupplier.extensions)
             return;
         }
+        const supplier = await this.userQueryRepository.find(createdSupplier.data.email);
+        if (!supplier){
+            this.loggerService.log("[supplier] не был найден в репозитории");
+            res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+            return
+        }
+        res.status(HTTP_STATUSES.CREATED_201).send(supplier);
+        return;
     };
 }

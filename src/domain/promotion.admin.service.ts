@@ -59,7 +59,10 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
                 data: null
             };
         }
-        return createUser;
+        return {
+            status: 'Success',
+            data: createUser
+        };
 
     }
     async updatePasswordSupplier(): Promise<void> {}

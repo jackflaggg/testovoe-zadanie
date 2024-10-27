@@ -4,7 +4,6 @@ import {PrismaService} from "../../db/db";
 import {LoggerServiceInterface} from "../../models/logger.service.model";
 import {PromotionQueryRepoInterface} from "../../models/promotion.query.repository.interface";
 import {queryHelperToPromotion} from "../../utils/mapper/InQueryPromotion.mapper";
-import * as sea from "node:sea";
 
 @injectable()
 export class UserQueryRepository implements PromotionQueryRepoInterface {
