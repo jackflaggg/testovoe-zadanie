@@ -8,5 +8,5 @@ export interface ErrorCreate {
 
 export interface SuccessCreate {
     status: string,
-    data: UserModel | PromotionModel
+    data: UserModel | PromotionModel | string
 }

@@ -1,9 +1,16 @@
-export const queryHelperToPromotions = (queryBlog: any) => {
+export interface queryBlogInterface {
+    pageNumber?: number,
+    pageSize?:number,
+    sortBy?: string,
+    sortDirection?: string,
+    searchNameTerm?: string | null,
+}
+export const queryHelperToPromotions = (queryPromo: queryBlogInterface) => {
     return {
-        pageNumber: queryBlog.pageNumber ?? 1,
-        pageSize: queryBlog.pageSize ?? 10,
-        sortBy: queryBlog.sortBy ?? 'createdAt',
-        sortDirection: queryBlog.sortDirection ?? 'desc',
-        searchNameTerm: queryBlog.searchNameTerm ?? null,
+        pageNumber: queryPromo.pageNumber ?? 1,
+        pageSize: queryPromo.pageSize ?? 10,
+        sortBy: queryPromo.sortBy ?? 'createdAt',
+        sortDirection: queryPromo.sortDirection ?? 'desc',
+        searchNameTerm: queryPromo.searchNameTerm ?? null,
     }
 };

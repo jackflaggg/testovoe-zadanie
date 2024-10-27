@@ -93,7 +93,7 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
         }
         return {
             status: 'Success',
-            data: createUser
+            data: createUser.email
         };
 
     }

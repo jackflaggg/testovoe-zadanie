@@ -125,11 +125,10 @@ export class PromotionController extends BaseController implements PromotionCont
         if (createdSupplier instanceof OutCreateSupplierErrors || !createdSupplier.data){
             this.loggerService.log('[promotionAdminService] в сервисе вернул непредвиденные данные');
             res
-                .status(HTTP_STATUSES.BAD_REQUEST_400)
-                .send(createdSupplier.extensions)
+                .sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
             return;
         }
-        const supplier = await this.userQueryRepository.findByEmailSupplier(createdSupplier.data.email);
+        const supplier = await this.userQueryRepository.findByEmailSupplier(String(createdSupplier.data));
         if (!supplier){
             this.loggerService.log("[supplier] не был найден в репозитории");
             res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
