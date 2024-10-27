@@ -12,7 +12,7 @@ export interface createPromotionInterface {
 
 export interface PromotionRepoInterface {
     createPromotion: (body: createPromotionInterface) =>  Promise<PromotionModel | null>
-    updatePromotion: (body: any, idPromotion: number) =>  Promise<PromotionModel | null>
+    updatePromotion: (body: {title: string, description: string}, idPromotion: number) =>  Promise<PromotionModel | null>
     deletePromotion: (id: number) =>  Promise<PromotionModel | null>
 }
 

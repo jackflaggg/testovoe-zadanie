@@ -4,6 +4,7 @@ import 'reflect-metadata'
 import {PrismaService} from "../../db/db";
 import {LoggerServiceInterface} from "../../models/logger.service.model";
 import {queryHelperToPromotion} from "../../utils/mapper/InQueryPromotion.mapper";
+import {queryPromoInterface} from "../../utils/mapper/helper.query.get";
 
 @injectable()
 export class PromotionQueryRepository {
@@ -19,7 +20,7 @@ export class PromotionQueryRepository {
         }
     }
 
-    async getAll(queryParamsTo: any) {
+    async getAll(queryParamsTo: queryPromoInterface) {
         const {searchNameTerm, sortBy, sortDirection, cursor, pageSize} = queryHelperToPromotion(queryParamsTo);
         try {
             const whereClause = searchNameTerm ? {

@@ -1,11 +1,11 @@
-export interface queryBlogInterface {
+export interface queryPromoInterface {
     pageNumber?: number,
     pageSize?:number,
     sortBy?: string,
     sortDirection?: string,
     searchNameTerm?: string | null,
 }
-export const queryHelperToPromotions = (queryPromo: queryBlogInterface) => {
+export const queryHelperToPromotions = (queryPromo: queryPromoInterface) => {
     return {
         pageNumber: queryPromo.pageNumber ?? 1,
         pageSize: queryPromo.pageSize ?? 10,
