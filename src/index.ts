@@ -7,7 +7,7 @@ import {PrismaService} from "./db/db";
 import {PromotionController} from "./controllers/promotion.controller";
 import {PromotionControllerModels} from "./models/promotion.controller.models";
 import {PromotionQueryRepository} from "./repository/promotion/promotion-query-repository";
-import {PromotionQueryRepoInterface} from "./models/promotion.query.repository.interface";
+import {PromotionQueryRepoInterface, UserQueryRepoInterface} from "./models/promotion.query.repository.interface";
 import {PromotionRepoInterface} from "./models/promotion.repository.interface";
 import {PromotionRepository} from "./repository/promotion/promotion-repository";
 import {UserRepository} from "./repository/user/user-repository";
@@ -26,7 +26,7 @@ export const appContainers = new ContainerModule((bind: interfaces.Bind): void =
     bind<PromotionRepoInterface>(TYPES.PromotionRepository).to(PromotionRepository).inSingletonScope();
     bind<HashServiceInterface>(TYPES.HashServiceInterface).to(HashService).inSingletonScope();
     bind<PromotionRepoInterface>(TYPES.UserRepository).to(UserRepository).inSingletonScope();
-    bind<PromotionQueryRepoInterface>(TYPES.UserQueryRepository).to(UserQueryRepository).inSingletonScope();
+    bind<UserQueryRepoInterface>(TYPES.UserQueryRepository).to(UserQueryRepository).inSingletonScope();
     bind<PromotionQueryRepoInterface>(TYPES.PromotionQueryRepository).to(PromotionQueryRepository).inSingletonScope();
     bind<BasicAuthMiddleware>(TYPES.BasicAuthMiddleware).to(BasicAuthMiddleware).inSingletonScope();
     bind<App>(TYPES.Application).to(App).inSingletonScope();

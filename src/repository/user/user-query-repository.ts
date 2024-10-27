@@ -2,11 +2,11 @@ import {inject, injectable} from "inversify";
 import {TYPES} from "../../utils/types/types";
 import {PrismaService} from "../../db/db";
 import {LoggerServiceInterface} from "../../models/logger.service.model";
-import {PromotionQueryRepoInterface} from "../../models/promotion.query.repository.interface";
+import {UserQueryRepoInterface} from "../../models/promotion.query.repository.interface";
 import {queryHelperToPromotion} from "../../utils/mapper/InQueryPromotion.mapper";
 
 @injectable()
-export class UserQueryRepository implements PromotionQueryRepoInterface {
+export class UserQueryRepository implements UserQueryRepoInterface {
     constructor(@inject(TYPES.PrismaService) private prismaService: PrismaService,
                 @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface) {}
     async find( email: string) {
