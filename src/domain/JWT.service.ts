@@ -1,10 +1,10 @@
 import {Settings} from "../settings";
 import {secretErrorCheck} from "../utils/features/secret.error.feature";
-import {inject} from "inversify";
+import {inject, injectable} from "inversify";
 import jwt, {JwtPayload} from "jsonwebtoken";
 import {TYPES} from "../utils/types/types";
 import {LoggerServiceInterface} from "../models/logger.service.model";
-
+@injectable()
 export class JWTService {
     constructor(@inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface) {}
     async createAnyToken(userId: string, expiresInData: string = Settings.tokenDuration){

@@ -11,4 +11,5 @@ export const TYPES = {
     HashServiceInterface: Symbol.for("HashServiceInterface"),
     BasicAuthMiddleware: Symbol.for("BasicAuthMiddleware"),
     ErrorsUnique: Symbol.for("ErrorsUnique"),
+    JWTService: Symbol.for("JWTService"),
 }

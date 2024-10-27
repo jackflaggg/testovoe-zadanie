@@ -39,7 +39,7 @@ export class PromotionController extends BaseController implements PromotionCont
             {
                 path: '/admin/login',
                 method: 'post',
-                func: this.login,
+                func: this.loginAdmin,
                 //TODO: Не прокидывается ошибка в мидлвэйр
                 middlewares: [this.basicAuthMiddleware, new ValMiddleToBasic()] },
             {
@@ -79,7 +79,7 @@ export class PromotionController extends BaseController implements PromotionCont
         ])
     }
 
-    async login (req: Request, res: Response, next: NextFunction) : Promise<void>{
+    async loginAdmin (req: Request, res: Response, next: NextFunction) : Promise<void>{
         try {
             const [email, password] = Settings.admin.split(':');
 

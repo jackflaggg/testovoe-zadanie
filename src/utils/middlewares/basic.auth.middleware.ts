@@ -44,15 +44,7 @@ export class BasicAuthMiddleware implements MiddlewareInterface {
             res.sendStatus(HTTP_STATUSES.NOT_AUTHORIZATION_401);
             return;
         }
-        // console.log(fromUTF8ToBase64(auth.slice(6)))
-        // const credEmail = await this.userQueryRepository.find(adminEmail);
-        //
-        // if (!credEmail){
-        //     this.loggerService.log(`[userQueryRepository] ошибка в поиске бд`);
-        //     res.sendStatus(HTTP_STATUSES.NOT_AUTHORIZATION_401);
-        //     return;
-        // }
-        // req.body = credEmail;
+
         next()
     }
 }
