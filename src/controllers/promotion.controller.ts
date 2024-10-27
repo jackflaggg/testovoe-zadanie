@@ -203,7 +203,12 @@ export class PromotionController extends BaseController implements PromotionCont
         const {title, description} = req.body;
         const {id} = req.params;
 
-        const updatedPromotion = await this.promotionAdminService.upda
+        const existingPromotion = await this.promotionQueryRepository.find(id);
+        if (!existingPromotion) {
+            res.status(HTTP_STATUSES.NOT_FOUND_404).send({data: null});
+            return;
+        }
+        const updatedPromotion = await this.promotionAdminService.updatePromotion(title, description, String(id));
 
     };
     async loginSupplier (req: Request, res: Response, next: NextFunction) : Promise<void>{};

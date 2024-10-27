@@ -87,7 +87,7 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
         };
 
     }
-    async updatePromotion(title: string, description: string, supplierId: string): Promise<any> {
+    async updatePromotion(title: string, description: string, promotionId: string): Promise<any> {
 
     }
     async updatePasswordSupplier(id: string, password: string): Promise<any> {
