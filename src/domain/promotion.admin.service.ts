@@ -88,7 +88,11 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
 
     }
     async updatePromotion(title: string, description: string, promotionId: string): Promise<any> {
-
+        const upPromotion = await this.promotionRepo.updatePromotion({title, description}, Number(promotionId));
+        if (!upPromotion) {
+            return null
+        }
+        return upPromotion;
     }
     async updatePasswordSupplier(id: string, password: string): Promise<any> {
 

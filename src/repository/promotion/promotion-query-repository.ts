@@ -1,4 +1,3 @@
-import {PromotionQueryRepoInterface} from "../../models/promotion.query.repository.interface";
 import {TYPES} from "../../utils/types/types";
 import {inject, injectable} from "inversify";
 import 'reflect-metadata'
@@ -11,7 +10,7 @@ export class PromotionQueryRepository {
     constructor(@inject(TYPES.PrismaService) private prismaService: PrismaService,
                 @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface) {}
 
-    async find(id: number) {
+    async findPromotion(id: number) {
         try {
             return await this.prismaService.client.promotionModel.findFirst({where: {id}});
         } catch (err: unknown){

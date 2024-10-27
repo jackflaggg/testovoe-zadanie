@@ -1,6 +1,6 @@
 export interface PromotionQueryRepoInterface {
     getAll(queryParamsTo: any): any;
-    find(id: any): any;
+    findPromotion(id: number): any;
 }
 
 export interface UserQueryRepoInterface {

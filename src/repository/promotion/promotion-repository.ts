@@ -34,7 +34,7 @@ export class PromotionRepository implements PromotionRepoInterface  {
         try {
             return await this.prisma.client.promotionModel.update({where: { id: idPromotion }, data: body});
         } catch (err: unknown){
-            this.logger.error('Возникла ошибка во время удаления акции:', err);
+            this.logger.error('Возникла ошибка во время обновления акции:', err);
             return null;
         }
     }
