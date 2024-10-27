@@ -6,7 +6,10 @@ import {LoggerServiceInterface} from "../models/logger.service.model";
 import {NextFunction, Request, Response} from "express";
 import {PromotionControllerModels} from "../models/promotion.controller.models";
 import {ValidateMiddleware} from "../utils/middlewares/validate.middleware";
-import {SuppliersRegisterDto, SupplierUpdateDto} from "../validators/suppliers.register.dto";
+import {
+    SuppliersRegisterUserDto,
+    SupplierUpdateUserDto
+} from "../validators/suppliers.register.dto";
 import {queryHelperToPromotions} from "../utils/mapper/helper.query.get";
 import {PromotionQueryRepoInterface} from "../models/promotion.query.repository.interface";
 import {HTTP_STATUSES} from "../models/http-statuses.models";
@@ -31,7 +34,7 @@ export class PromotionController extends BaseController implements PromotionCont
                 path: '/admin/register',
                 method: 'post',
                 func: this.registerSuppliers,
-                middlewares: [this.basicAuthMiddleware, new ValidateMiddleware(SuppliersRegisterDto)] },
+                middlewares: [this.basicAuthMiddleware, new ValidateMiddleware(SuppliersRegisterUserDto)] },
             {
                 path: '/admin/login',
                 method: 'post',
@@ -47,12 +50,30 @@ export class PromotionController extends BaseController implements PromotionCont
                 path: '/admin/supplier/:id',
                 method: 'put',
                 func: this.updateSuppliers,
-                middlewares: [this.basicAuthMiddleware, new ValidateMiddleware(SupplierUpdateDto)]
+                middlewares: [this.basicAuthMiddleware, new ValidateMiddleware(SupplierUpdateUserDto)]
             },
             {
                 path: '/admin/supplier/:id',
                 method: 'delete',
                 func: this.deleteSuppliers,
+                middlewares: [this.basicAuthMiddleware]
+            },
+            ///////
+            {
+                path: '/admin/promotions',
+                method: 'post',
+                func: this.createPromotion,
+                middlewares: [this.basicAuthMiddleware] },
+            {
+                path: '/admin/promotions/:id',
+                method: 'put',
+                func: this.updatePromotion,
+                middlewares: [this.basicAuthMiddleware, new ValidateMiddleware(SupplierUpdateUserDto)]
+            },
+            {
+                path: '/admin/promotions/:id',
+                method: 'delete',
+                func: this.deletePromotion,
                 middlewares: [this.basicAuthMiddleware]
             },
         ])

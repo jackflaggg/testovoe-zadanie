@@ -1,6 +1,6 @@
 import {IsEmail, IsString} from "class-validator";
 
-export class SuppliersRegisterDto{
+export class SuppliersRegisterUserDto{
     @IsEmail({}, { message: 'Неверно указан email'})
     email: string;
 
@@ -13,7 +13,7 @@ export class SuppliersRegisterDto{
     }
 }
 
-export class SupplierUpdateDto{
+export class SupplierUpdateUserDto{
     @IsString({ message: 'Не указан пароль' })
     password: string;
 
