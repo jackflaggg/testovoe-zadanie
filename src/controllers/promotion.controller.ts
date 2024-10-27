@@ -247,11 +247,17 @@ export class PromotionController extends BaseController implements PromotionCont
         const existingUser = await this.userQueryRepository.findByEmailSupplier(email);
 
         if (!existingUser){
-            res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+            res.sendStatus(HTTP_STATUSES.NOT_AUTHORIZATION_401);
             return;
         }
 
         const loginUser = await this.promotionAdminService.loginUser(email, password);
+        if(!loginUser){
+            res.sendStatus(HTTP_STATUSES.NOT_AUTHORIZATION_401);
+            return;
+        }
+        res.cookie('refreshToken', loginUser.refreshToken);
+        res.status(HTTP_STATUSES.OK_200).send({jwtToken: loginUser.jwtToken})
     };
     async refreshToken(req: Request, res: Response, next: NextFunction): Promise<void>{};
 }

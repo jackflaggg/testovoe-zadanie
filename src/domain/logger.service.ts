@@ -15,13 +15,13 @@ export class LoggerService implements LoggerServiceInterface {
             displayFunctionName: false,
         } as ISettingsParam<unknown>);
     }
-    log(...args: any[]) : void{
+    log(...args: string[]) : void{
         this.logger.info(...args);
     };
-    error(...args: any[]) : void{
+    error(...args: string[]) : void{
         this.logger.error(...args);
     };
-    warn(...args: any[]) : void{
+    warn(...args: string[]) : void{
         this.logger.warn(...args);
     };
 }

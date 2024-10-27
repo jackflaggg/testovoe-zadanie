@@ -7,6 +7,7 @@ import {UserRepository} from "../repository/user/user-repository";
 import {errUnique} from "../models/err-unique-interface";
 import {LoggerService} from "./logger.service";
 import {createPromotionInterface, PromotionRepoInterface} from "../models/promotion.repository.interface";
+import {JWTService} from "./JWT.service";
 
 @injectable()
 export class PromotionAdminService implements PromotionAdminServiceInterface{
@@ -15,7 +16,8 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
                 @inject(TYPES.ErrorsUnique) private errorsUnique: errUnique,
                 @inject(TYPES.UserRepository) private userRepository: UserRepository,
                 @inject(TYPES.LoggerServiceInterface) private loggerService: LoggerService,
-                @inject(TYPES.PromotionRepository) private promotionRepo: PromotionRepoInterface,) {}
+                @inject(TYPES.PromotionRepository) private promotionRepo: PromotionRepoInterface,
+                @inject(TYPES.JWTService) private jwtService: JWTService,) {}
 
     async loginAdmin(email: string, password: string) {
 
@@ -129,7 +131,24 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
         return await this.userRepository.deleteUser(Number(id));
     }
     async loginUser(email: string, password: string): Promise<any> {
+        const hashPassword = await this.hashService._generateHash(password);
 
+        if (!hashPassword) {
+            return null
+        }
+
+        const comparePassword = await this.hashService.comparePassword(password, hashPassword);
+        if (!comparePassword) {
+            return null
+        }
+
+        const user = await this.userQueryRepository.findByEmailSupplier(email);
+
+        const jwt = await this.jwtService.createAnyToken(String(user!.id));
+        const refresh = await this.jwtService.createAnyToken(String(user!.id))
+        if (!jwt || !refresh) {
+            return null
+        }
+        return {jwtToken: jwt, refreshToken: refresh};
     }
-    async statusPromoToSupplier(id: string): Promise<void> {}
 }

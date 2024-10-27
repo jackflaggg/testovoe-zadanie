@@ -13,7 +13,7 @@ import {PromotionController} from "./controllers/promotion.controller";
 import {PromotionAdminServiceInterface} from "./models/admin.promotion.service.model";
 import {HashServiceInterface} from "./models/hash.service.model";
 import {BasicAuthMiddleware} from "./utils/middlewares/basic.auth.middleware";
-import {ErrorsUnique} from "./utils/features/errors.unique";
+import cookieParser from "cookie-parser";
 
 @injectable()
 export class App {
@@ -40,6 +40,7 @@ export class App {
     useMiddleware() {
         this.app.use(express.json());
         this.app.use(cors());
+        this.app.use(cookieParser())
     }
 
     useRoutes(){

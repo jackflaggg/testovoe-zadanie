@@ -20,6 +20,7 @@ import {BasicAuthMiddleware} from "./utils/middlewares/basic.auth.middleware";
 import {ErrorsUnique} from "./utils/features/errors.unique";
 import {errUnique} from "./models/err-unique-interface";
 import {AuthBearerMiddleware} from "./utils/middlewares/auth.bearer.middleware";
+import {JWTService} from "./domain/JWT.service";
 
 export const appContainers = new ContainerModule((bind: interfaces.Bind): void => {
     bind<LoggerServiceInterface>(TYPES.LoggerServiceInterface).to(LoggerService).inSingletonScope();
@@ -34,6 +35,7 @@ export const appContainers = new ContainerModule((bind: interfaces.Bind): void =
     bind<BasicAuthMiddleware>(TYPES.BasicAuthMiddleware).to(BasicAuthMiddleware).inSingletonScope();
     bind<errUnique>(TYPES.ErrorsUnique).to(ErrorsUnique).inSingletonScope();
     bind<AuthBearerMiddleware>(TYPES.AuthBearerMiddleware).to(AuthBearerMiddleware).inSingletonScope();
+    bind<JWTService>(TYPES.JWTService).to(JWTService).inSingletonScope();
     bind<App>(TYPES.Application).to(App).inSingletonScope();
 })
 
