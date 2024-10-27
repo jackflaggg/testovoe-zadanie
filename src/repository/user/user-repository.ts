@@ -4,6 +4,7 @@ import {TYPES} from "../../utils/types/types";
 import {PrismaService} from "../../db/db";
 import {LoggerServiceInterface} from "../../models/logger.service.model";
 import {CreateUserDto} from "../../models/UserRepository.models";
+import {UserModel} from "@prisma/client";
 
 @injectable()
 export class UserRepository implements UserRepoInterface {
@@ -36,7 +37,7 @@ export class UserRepository implements UserRepoInterface {
             return null;
         }
     }
-    async deleteUser(id: number) {
+    async deleteUser(id: number): Promise<UserModel | null> {
         try {
             return await this.prismaService.client.userModel.delete({
                 where: {

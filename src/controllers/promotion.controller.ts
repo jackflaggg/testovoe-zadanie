@@ -48,7 +48,13 @@ export class PromotionController extends BaseController implements PromotionCont
                 method: 'put',
                 func: this.updateSuppliers,
                 middlewares: [this.basicAuthMiddleware, new ValidateMiddleware(SupplierUpdateDto)]
-            }
+            },
+            {
+                path: '/admin/supplier/:id',
+                method: 'delete',
+                func: this.deleteSuppliers,
+                middlewares: [this.basicAuthMiddleware]
+            },
         ])
     }
 
@@ -125,7 +131,27 @@ export class PromotionController extends BaseController implements PromotionCont
         return
 
     };
-    async deleteSuppliers (req: Request, res: Response, next: NextFunction) : Promise<void> {};
+    async deleteSuppliers (req: Request, res: Response, next: NextFunction) : Promise<void> {
+        if (!req.params.id){
+            this.loggerService.log('[userError] забыли ввести данные');
+            res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400);
+            return;
+        }
+        const existingSupplier = await this.userQueryRepository.findId(Number(id));
+        if (!existingSupplier) {
+            this.loggerService.log('[userQueryRepository] не существует юзера')
+            res.status(HTTP_STATUSES.NOT_FOUND_404).send({data: null});
+            return;
+        }
+        const deleteSupplier = await this.promotionAdminService.deleteSupplier(id);
+        if (!deleteSupplier){
+            this.loggerService.log('[userRepository] произошла ошибка при удалении юзера')
+            res.status(HTTP_STATUSES.BAD_REQUEST_400).send({data: null});
+            return;
+        }
+        res.status(HTTP_STATUSES.CREATED_201).send(deleteSupplier);
+        return
+    };
     async createPromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{};
     async deletePromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{};
     async updatePromotion (req: Request, res: Response, next: NextFunction) : Promise<void>{};
