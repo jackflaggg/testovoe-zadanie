@@ -1,4 +1,4 @@
-import {PromotionRepoInterface} from "../../models/promotion.repository.interface";
+import {PromotionRepoInterface, UserRepoInterface} from "../../models/promotion.repository.interface";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../../utils/types/types";
 import {PrismaService} from "../../db/db";
@@ -7,10 +7,10 @@ import {UserModel} from "@prisma/client";
 import {CreateUserDto} from "../../models/UserRepository.models";
 
 @injectable()
-export class UserRepository implements PromotionRepoInterface {
+export class UserRepository implements UserRepoInterface {
     constructor(@inject(TYPES.PrismaService) private prismaService: PrismaService,
                 @inject(TYPES.LoggerServiceInterface) private logger: LoggerServiceInterface) {}
-    async create(body: CreateUserDto)  {
+    async createUser(body: CreateUserDto)  {
         try {
             return await this.prismaService.client.userModel.create({
                 data: {
@@ -24,18 +24,20 @@ export class UserRepository implements PromotionRepoInterface {
             return null;
         }
     }
-    async update(body: any, idPromotion: number) {
+    async updateUser(password: string, id: number) {
         try {
             return await this.prismaService.client.userModel.update({
-                where: {id: idPromotion},
-                data: body
+                where: {id},
+                data: {
+                    password
+                }
             });
         } catch (err: unknown){
             this.logger.error('Возникла ошибка во время создания акции:', err);
             return null;
         }
     }
-    async delete(id: number) {
+    async deleteUser(id: number) {
         try {
             return await this.prismaService.client.userModel.delete({
                 where: {

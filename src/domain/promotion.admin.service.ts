@@ -5,13 +5,15 @@ import {TYPES} from "../utils/types/types";
 import {HashServiceInterface} from "../models/hash.service.model";
 import {UserRepository} from "../repository/user/user-repository";
 import {errUnique} from "../models/err-unique-interface";
+import {LoggerService} from "./logger.service";
 
 @injectable()
 export class PromotionAdminService implements PromotionAdminServiceInterface{
     constructor(@inject(TYPES.UserQueryRepository) private userQueryRepository: UserQueryRepository,
                 @inject(TYPES.HashServiceInterface) private hashService: HashServiceInterface,
                 @inject(TYPES.ErrorsUnique) private errorsUnique: errUnique,
-                @inject(TYPES.UserRepository) private userRepository: UserRepository,) {}
+                @inject(TYPES.UserRepository) private userRepository: UserRepository,
+                @inject(TYPES.LoggerServiceInterface) private loggerService: LoggerService,) {}
 
     async loginAdmin(email: string, password: string) {
 
@@ -26,8 +28,26 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
     async createPromotion(): Promise<void> {}
     // получение всех акций из репозитория
     async deletePromotion(id: string): Promise<void> {}
-    async updatePromotion(id: string, password: string): Promise<void> {
-        const existingSup = await this.userQueryRepository.findId(Number(id))
+    async updatePromotion(id: string, password: string): Promise<any> {
+        const existingSup = await this.userQueryRepository.findId(Number(id));
+
+        if (!existingSup) {
+            this.loggerService.log('[PromotionAdminService] не существует юзера')
+            return null;
+        }
+
+        const hashPassword = await this.hashService._generateHash(password);
+        if (!hashPassword) {
+            this.loggerService.log('[hashService] ошибка при хэшировании')
+            return null;
+        }
+        const compareHashAndPassword = await this.hashService.comparePassword(password, hashPassword);
+        if (!compareHashAndPassword) {
+            this.loggerService.log('[hashService] ошибка при перепроверке паролей')
+            return null;
+        }
+
+        const updateUser = await this.userRepository.updateUser(hashPassword, Number(id))
     }
     async createSupplier(email: string, password: string) {
         const uniqueErrors = await this.errorsUnique.checkUnique(email);
@@ -54,7 +74,7 @@ export class PromotionAdminService implements PromotionAdminServiceInterface{
             role: 'SUPPLIER',
         }
 
-        const createUser = await this.userRepository.create(newSupplier);
+        const createUser = await this.userRepository.createUser(newSupplier);
         if (!createUser) {
             return {
                 status: 'BadRequest',
